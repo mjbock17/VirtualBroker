@@ -70,9 +70,11 @@ class SortSearch:
 
     def processButton(self, key):
         text = self.display.getText()  
-        if key == 'C':
+        if key == 'Stock Picking':
+            #send to new GUI
             self.display.setText("")
-        elif key == '<-':
+        elif key == 'Portfolio Development':
+            #send to new GUI
             self.display.setText(text[:-1])
         elif key == 'Linear Search':
             b = linSearch(3,globallist)
