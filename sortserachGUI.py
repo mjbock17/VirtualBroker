@@ -2,7 +2,7 @@ from graphics import *
 from button import Button
 
 
-class SortSearch:
+class Virtual_Broker:
     def __init__(self):
         win = GraphWin("Virtual Broker",700,500)
         win.setCoords(0,0,9,7)
@@ -101,5 +101,5 @@ class SortSearch:
 
 
 if __name__ == '__main__':
-    theCalc = SortSearch()
+    theCalc = Virtual_Broker()
     theCalc.run()
