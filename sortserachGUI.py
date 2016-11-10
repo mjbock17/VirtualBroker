@@ -69,12 +69,12 @@ class Virtual_Broker:
 
 
     def processButton(self, key):
-        text = self.display.getText()  
-        if key == 'Stock Picking':
-            #send to new GUI
-            self.display.setText("")
+        if key == 'Stock Picking':#
+            self.win.close()#
+            import StockpickGUI#
+            stockpicking()#
         elif key == 'Portfolio Development':
-            #send to new GUI
+            import PortfolioDevGUI
             self.display.setText(text[:-1])
         elif key == 'Linear Search':
             b = linSearch(3,globallist)
