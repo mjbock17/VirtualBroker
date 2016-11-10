@@ -103,3 +103,24 @@ class Virtual_Broker:
 if __name__ == '__main__':
     theCalc = Virtual_Broker()
     theCalc.run()
+
+class stockpicking:
+    def __init__(self):
+        win = GraphWin("Stock Picking",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+
+        self.__createstockDisplay()
+    
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Enter Stock Information")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setStyle("bold")
+
+stockpicking()
+        
