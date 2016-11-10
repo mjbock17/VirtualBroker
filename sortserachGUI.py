@@ -74,8 +74,8 @@ class Virtual_Broker:
             import StockpickGUI#
             stockpicking()#
         elif key == 'Portfolio Development':
-            import PortfolioDevGUI
-            self.display.setText(text[:-1])
+            import pmgmt #
+            pmgmt()
         elif key == 'Linear Search':
             b = linSearch(3,globallist)
             self.display.setText(b)
@@ -123,4 +123,25 @@ class stockpicking:
         title.setStyle("bold")
 
 stockpicking()
+''' I ADDED THIS AS THE PRELIMINARY PORTFOLIO MANAGEMENT
+class pmgmt:
+    def __init__(self):
+        win = GraphWin("Portfolio Management",800,600)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+
+        self.__createstockDisplay()
+    
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,10), "How can I help you with your portfolio?")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setStyle("bold")'''
+
+
+
         
