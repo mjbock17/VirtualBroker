@@ -6,7 +6,7 @@
                 return index
             if p == "BackSpace":
                 index = index[0:len(index) -1] ###Removes last item
-                self.text.setText(message + " " + index)
+                self.text.setText(message + " " + index) ###Replace self.text with textbox object
                 continue
             index = index + str(p) ###Adds String
             self.text.setText(message + " " + index) ###Replace self.text with made textbox
