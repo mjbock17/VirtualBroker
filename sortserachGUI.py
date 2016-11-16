@@ -2,7 +2,6 @@ from graphics import *
 from button import Button
 
 class stockpicking:
-class stockpicking:
     def __init__(self):
         win = GraphWin("Stock Picking",700,500)
         win.setCoords(0,0,10,10)
