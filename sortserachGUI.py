@@ -37,6 +37,10 @@ class stockpicking:
             key = self.getButton()
             self.processButton(key)
 
+from graphics import *
+from button import Button
+from graphics import *
+from button import Button
 class pmgmt:
     def __init__(self):
         win = GraphWin("Portfolio Management",700,500)#
@@ -48,6 +52,13 @@ class pmgmt:
         #self.__createinputDisplay()
         self.__createButtons()
         self.__makeJerry()
+
+        box1 = Rectangle(Point(1,1), Point(9,2)) ###textbox
+        box1.setFill("white")
+        box1.draw(self.win)
+        textbox = Text(Point(5,1.5), "") ###Creates a blank textbox
+        textbox.draw(self.win)
+        self.textB = textbox ###creates a textbox variable
 
     def __bgimg(self):
         bg = Image(Point(5,5),"gradient.png")
@@ -105,12 +116,10 @@ class pmgmt:
                 
     def processButton(self, key):
         # Updates the display of the calculator for press of this key
-        text = self.display.getText()
         if key == 'C':
             self.display.setText("")
-        elif key == 'Linear Search':
-            ans = linSearch(21,mynums)
-            self.display.setText(ans)
+        elif key == '100%':
+            num = self.inputBar()
         elif key == 'Binary Search':
             ans1 = binSearch(21,mynums)
             self.display.setText(ans1)
@@ -123,14 +132,27 @@ class pmgmt:
         else:
             # Normal key press, append it to the end of the display
             self.display.setText(text+key)
- 
+            
+    def inputBar(self):
+        self.textB.setText("hi")
+        index = "" ###Blank Message
+        while True:
+            p = self.win.getKey() ###Gets key pressed
+            if p == "Return":
+                return index
+            if p == "BackSpace":
+                index = index[0:len(index) -1] ###Removes last item
+                self.textB.setText(message + " " + index)
+                continue
+            index = index + str(p) ###Adds String
+            self.textB.setText(" " + index)
+            
     def run(self):
         # Infinite 'event loop' to process button clicks.
         while True:
             key = self.getButton()
             self.processButton(key)
-    
-        
+ 
 class VirtualBroker: #name change
     def __init__(self):
         win = GraphWin("Virtual Broker",700,500)
@@ -201,11 +223,12 @@ class VirtualBroker: #name change
     def processButton(self, key):
         text = self.display.getText()  
         if key == 'Stock Picking':#
-            self.win.close()#
-            stockpicking()#
+            self.win.close()##
         elif key == 'Portfolio Management':#
-            self.win.close()#
-            pmgmt()#
+##            self.win.close()#
+            newin = pmgmt()#
+            while True:
+                newin.run()
 
         else:
             self.display.setText(text+key)
@@ -217,5 +240,5 @@ class VirtualBroker: #name change
             self.processButton(key)
 
 if __name__ == '__main__':
-    theCalc = VirtualBroker() #name change from sortsearch
-    theCalc.run()
+    theCalc1 = VirtualBroker()
+    theCalc1.run()
