@@ -2,12 +2,25 @@ from graphics import *
 from button import Button
 
 class stockpicking:
+class stockpicking:
     def __init__(self):
         win = GraphWin("Stock Picking",700,500)
         win.setCoords(0,0,10,10)
         win.setBackground("slategray")
         self.win = win
-        self.__createstockDisplay()   
+        self.__createstockDisplay()
+        self.__createButtons()
+
+    
+
+    def __createButtons(self):
+
+        bsort = [(3,1,"Analyze the Stock")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+             self.buttons.append(Button(self.win,Point(cx,cy),3,1,label))
+        for b in self.buttons:
+            b.activate()
     
     def __createstockDisplay(self):
         head = Rectangle(Point(1,8),Point(9,9))
@@ -16,31 +29,75 @@ class stockpicking:
         title = Text(Point(5,8.5), "Enter Stock Information")
         title.draw(self.win)
         title.setSize(30)
+        title.setFace("courier")
         title.setStyle("bold")
-        c = Rectangle(Point(.5,1),Point(3.1,4.75))
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
         c.setFill('black')
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
-        image = Image(Point(1.8,3),"myrodin.gif")
+        image = Image(Point(8,5),"myrodin.gif")
         image.draw(self.win)
-        text2 = Text(Point(1.8,1.3),"Hello, my name is Jerry!")
-        text2.setTextColor('white')
-        text2.setSize(10)
-        text2.setFace("courier")
-        text2.setStyle("bold")
-        text2.draw(self.win)
-        self.display = text2
 
+        inputbox = Rectangle(Point(2.5,6),Point(3,5.2))
+        inputbox.setFill('white')
+        inputbox.draw(self.win)
+        inputbox1 = Rectangle(Point(2.5,5),Point(3,4.2))
+        inputbox1.setFill('white')
+        inputbox1.draw(self.win)
+        inputbox2 = Rectangle(Point(2.5,4),Point(3,3.2))
+        inputbox2.setFill('white')
+        inputbox2.draw(self.win)
+
+        inputbox3 = Rectangle(Point(5,6),Point(5.5,5.2))
+        inputbox3.setFill('white')
+        inputbox3.draw(self.win)
+        inputbox4 = Rectangle(Point(5,5),Point(5.5,4.2))
+        inputbox4.setFill('white')
+        inputbox4.draw(self.win)
+        inputbox5 = Rectangle(Point(5,4),Point(5.5,3.2))
+        inputbox5.setFill('white')
+        inputbox5.draw(self.win)
+        
+    def inputBar(self):    ###Need to create a textbox before using a 
+        index = "" ###Blank Message
+        while True:
+            p = self.win.getKey() ###Gets key pressed. Replace win with object
+            if p == "Return":
+                return index
+            if p == "BackSpace":
+                index = index[0:len(index) -1] ###Removes last item
+                self.text.setText(message + " " + index) ###Replace self.text with textbox object
+                continue
+            index = index + str(p) ###Adds String
+            self.text.setText(message + " " + index) ###Replace self.text with made textbox
+    
+    def getButton(self):
+        while True:
+            p = self.win.getMouse()
+            for b in self.buttons:
+                if b.clicked(p):
+                    return b.getLabel()
+
+    def processButton(self, key):
+        text = self.display.getText()  
+        if key == 'Analyze the Stock':#
+            self.win.close()#
+            stockpicking()#
+        elif key == 'Portfolio Management':#
+            self.win.close()#
+            pmgmt()#
+
+        else:
+            self.display.setText(text+key)
+        
     def run(self):
         while True:
             key = self.getButton()
             self.processButton(key)
 
-from graphics import *
-from button import Button
-from graphics import *
-from button import Button
+
+
 class pmgmt:
     def __init__(self):
         win = GraphWin("Portfolio Management",700,500)#
