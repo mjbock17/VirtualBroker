@@ -363,6 +363,9 @@ class VirtualBroker: #name change
         text = self.display.getText()  
         if key == 'Stock Picking':#
             self.win.close()##
+            newin = stockpicking()
+            while True:
+                newin.run()
         elif key == 'Portfolio Management':#
             self.win.close()#
             newin = pmgmt()#
