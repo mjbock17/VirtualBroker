@@ -239,11 +239,6 @@ class pmgmt:
         title.setSize(15)#
         title.setStyle("bold")
 
-    '''def __createinputDisplay(self):
-        newdisp = Rectangle(Point(3,5.5),Point(7,6.5))
-        newdisp.setFill('white')
-        newdisp.draw(self.win)'''
-
     def getButton(self):
         # Waits for a button to be clicked and returns the label of
         #    the button that was clicked.
@@ -255,22 +250,12 @@ class pmgmt:
                 
     def processButton(self, key):
         # Updates the display of the calculator for press of this key
-        if key == 'C':
-            self.display.setText("")
-        elif key == '100%':
-            num = self.inputBar()
-        elif key == 'Binary Search':
-            ans1 = binSearch(21,mynums)
-            self.display.setText(ans1)
-        elif key == 'Selection Sort':
-            selSort(mynums)
-            self.display.setText(mynums)
-        elif key == 'Merge Sort':
-            mergeSort(mynums)
-            self.display.setText(mynums)
-        else:
-            # Normal key press, append it to the end of the display
-            self.display.setText(text+key)
+        if key == '100%':
+            self.win.close()#
+            newin = highrisk()#
+            while True:
+                newin.run()
+    
             
     def inputBar(self):
         self.textB.setText("hi")
@@ -291,7 +276,68 @@ class pmgmt:
         while True:
             key = self.getButton()
             self.processButton(key)
- 
+
+class highrisk:
+    def __init__(self):
+        win = GraphWin("High Risk",700,500)#
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createstockDisplay()
+        self.__createButtons()
+        self.__makeJerry()
+
+    def __bgimg(self):
+        bg = Image(Point(5,5),"gradient.png")
+        bg.draw(self.win) 
+    
+    def __createButtons(self):
+        aSpecs = [(1.5,6,'Long Term'),
+                  (1.5,4.5,'Short Term')]
+
+        self.buttons = []
+        for (cx,cy,label) in aSpecs:
+            self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
+            
+        # activate all buttons
+        for b in self.buttons:
+            b.activate()
+
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "High Risk Portfolio")#
+        title.draw(self.win)
+        title.setSize(15)#
+        title.setStyle("bold")
+        
+    def __makeJerry(self):
+        image = Image(Point(8.3,5),"myrodin.gif")
+        image.draw(self.win)
+        text2 = Text(Point(7.8,2.8),"You're a risk taker, I like that.")
+        text2.setTextColor('white')
+        text2.setSize(10)
+        text2.setFace("courier")
+        text2.setStyle("bold")
+        text2.draw(self.win)
+
+    def getButton(self):
+        # Waits for a button to be clicked and returns the label of
+        #    the button that was clicked.
+        while True:
+            p = self.win.getMouse()
+            for b in self.buttons:
+                if b.clicked(p):
+                    return b.getLabel() # method exit
+                
+    def processButton(self, key):
+        # Updates the display of the calculator for press of this key
+        if key == 'Long Term':
+            return "hi"
+            #fill this in
+        
 class VirtualBroker: #name change
     def __init__(self):
         win = GraphWin("Virtual Broker",700,500)
@@ -388,3 +434,4 @@ class VirtualBroker: #name change
 if __name__ == '__main__':
     theCalc1 = VirtualBroker()
     theCalc1.run()
+
