@@ -84,23 +84,20 @@ class Data_Analysis:
             key = self.getButton()
             self.processButton(key)
 
-class stockpicking:
+class dontbuy:
     def __init__(self):
-        win = GraphWin("Stock Picking",700,500)
+        win = GraphWin("Stock Picking(4)",700,500)
         win.setCoords(0,0,10,10)
         win.setBackground("slategray")
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
 
-    
-
     def __createButtons(self):
-
-        bsort = [(3,1,"Analyze the Stock")]
+        bsort = [(4,2,"Return to home page")]
         self.buttons = []
         for (cx,cy,label) in bsort:
-             self.buttons.append(Button(self.win,Point(cx,cy),3,1,label))
+             self.buttons.append(Button(self.win,Point(cx,cy),4,1,label))
         for b in self.buttons:
             b.activate()
     
@@ -108,7 +105,7 @@ class stockpicking:
         head = Rectangle(Point(1,8),Point(9,9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5,8.5), "Enter Stock Information")
+        title = Text(Point(5,8.5), "We Advise...")
         title.draw(self.win)
         title.setSize(30)
         title.setFace("courier")
@@ -121,39 +118,30 @@ class stockpicking:
         image = Image(Point(8,5),"myrodin.gif")
         image.draw(self.win)
 
-        inputbox = Rectangle(Point(2.5,6),Point(3,5.2))
-        inputbox.setFill('white')
-        inputbox.draw(self.win)
-        inputbox1 = Rectangle(Point(2.5,5),Point(3,4.2))
-        inputbox1.setFill('white')
-        inputbox1.draw(self.win)
-        inputbox2 = Rectangle(Point(2.5,4),Point(3,3.2))
-        inputbox2.setFill('white')
-        inputbox2.draw(self.win)
+        questionbox = Rectangle(Point(1,7.5),Point(6.75,6.2))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
 
-        inputbox3 = Rectangle(Point(5,6),Point(5.5,5.2))
-        inputbox3.setFill('white')
-        inputbox3.draw(self.win)
-        inputbox4 = Rectangle(Point(5,5),Point(5.5,4.2))
-        inputbox4.setFill('white')
-        inputbox4.draw(self.win)
-        inputbox5 = Rectangle(Point(5,4),Point(5.5,3.2))
-        inputbox5.setFill('white')
-        inputbox5.draw(self.win)
+        question = Text(Point(3.8,7.1),"to NOT buy this stock,")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+
+        question1 = Text(Point(3.8,6.5),"for these reasons:")
+        question1.draw(self.win)
+        question1.setSize(15)
+        question1.setFace('courier')
+
+        reason1 = Text(Point(3.8, 5.8),"-The stock is most likely overpriced")
+        reason1.draw(self.win)
+        reason1.setSize(13)
+        reason1.setFace('courier')
+
+        reason2 = Text(Point(3.5,5),"-Dividend income is insufficient")
+        reason2.draw(self.win)
+        reason2.setSize(13)
+        reason2.setFace('courier')
         
-    def inputBar(self):    ###Need to create a textbox before using a 
-        index = "" ###Blank Message
-        while True:
-            p = self.win.getKey() ###Gets key pressed. Replace win with object
-            if p == "Return":
-                return index
-            if p == "BackSpace":
-                index = index[0:len(index) -1] ###Removes last item
-                self.text.setText(message + " " + index) ###Replace self.text with textbox object
-                continue
-            index = index + str(p) ###Adds String
-            self.text.setText(message + " " + index) ###Replace self.text with made textbox
-    
     def getButton(self):
         while True:
             p = self.win.getMouse()
@@ -162,22 +150,237 @@ class stockpicking:
                     return b.getLabel()
 
     def processButton(self, key):
-        text = self.display.getText()  
-        if key == 'Analyze the Stock':#
+        if key == 'Return to home page':#
             self.win.close()#
-            stockpicking()#
-        elif key == 'Portfolio Management':#
-            self.win.close()#
-            pmgmt()#
-
-        else:
-            self.display.setText(text+key)
+            newin = VirtualBroker()
+            while True:
+                newin.run()
         
     def run(self):
         while True:
             key = self.getButton()
             self.processButton(key)
 
+class retain_peGUI:
+    def __init__(self):
+        win = GraphWin("Stock Picking(2)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+
+    def __createButtons(self):
+        bsort = [(4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+             self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+        for b in self.buttons:
+            b.activate()
+    
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Stock Evaluation")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+
+        questionbox = Rectangle(Point(1,7.5),Point(6.75,6.25))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+
+        question = Text(Point(3.8,7.1),"What is the PE ratio?")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+
+        question = Text(Point(3.8,6.7),"(Price over Earnings)")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+
+
+    def getButton(self):
+        while True:
+            p = self.win.getMouse()
+            for b in self.buttons:
+                if b.clicked(p):
+                    return b.getLabel()
+
+    def processButton(self, key):
+        if key == "PE greater than or equal to 18":#
+            self.win.close()#
+            newin = dontbuy()
+            while True:
+                newin.run()
+        elif key == 'PE less than 18':#
+            self.win.close()#
+            newin = divyeild()#
+            while True:
+                newin.run()
+        
+    def run(self):
+        while True:
+            key = self.getButton()
+            self.processButton(key)
+
+class grow_peGUI:
+    def __init__(self):
+        win = GraphWin("Stock Picking(3)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+
+    def __createButtons(self):
+        bsort = [(4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+             self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+        for b in self.buttons:
+            b.activate()
+    
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Stock Evaluation")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+
+        questionbox = Rectangle(Point(1,7.5),Point(6.75,6.25))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+
+        question = Text(Point(3.8,7.1),"What is the PE ratio?")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+
+        question = Text(Point(3.8,6.7),"(Price over Earnings)")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+
+
+    def getButton(self):
+        while True:
+            p = self.win.getMouse()
+            for b in self.buttons:
+                if b.clicked(p):
+                    return b.getLabel()
+
+    def processButton(self, key):
+        if key == 'PE greater than or equal to 18':#
+            self.win.close()#
+            newin = moreinfo()
+            while True:
+                newin.run()
+        elif key == 'PE less than 18':#
+            self.win.close()#
+            newin = dontbuy()#
+            while True:
+                newin.run()
+
+        
+    def run(self):
+        while True:
+            key = self.getButton()
+            self.processButton(key)
+
+class stockpicking:
+    def __init__(self):
+        win = GraphWin("Stock Picking",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+
+    def __createButtons(self):
+
+        bsort = [(4,2.5,"Grow Market Share"),(4,5,"Retain Market Share")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+             self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+        for b in self.buttons:
+            b.activate()
+    
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Stock Evaluation")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+
+        questionbox = Rectangle(Point(1,7.5),Point(6.75,6.25))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+
+        question = Text(Point(3.8,7.2),"Do you expect the company to retain its")
+        question.draw(self.win)
+        question.setSize(11)
+        question.setFace('courier')
+
+        question = Text(Point(3.8,6.6),"market share or to grow its market share?")
+        question.draw(self.win)
+        question.setSize(11)
+        question.setFace('courier')
+
+        
+    def getButton(self):
+        while True:
+            p = self.win.getMouse()
+            for b in self.buttons:
+                if b.clicked(p):
+                    return b.getLabel()
+
+    def processButton(self, key): 
+        if key == 'Retain Market Share':#
+            self.win.close()#
+            newin = retain_peGUI()#
+            while True:
+                newin.run()
+        elif key == 'Grow Market Share':#
+            self.win.close()#
+            newin = grow_peGUI()#
+            while True:
+                newin.run()
+        
+    def run(self):
+        while True:
+            key = self.getButton()
+            self.processButton(key)
 
 
 class pmgmt:
