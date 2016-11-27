@@ -188,10 +188,11 @@ class pmgmt:
         self.win = win
         self.__bgimg()
         self.__createstockDisplay()
-        #self.__createinputDisplay()
+        self.__createinputDisplay()
         self.__createButtons()
         self.__makeJerry()
 
+    def __createinputDisplay(self):
         box1 = Rectangle(Point(1,1), Point(9,2)) ###textbox
         box1.setFill("white")
         box1.draw(self.win)
@@ -205,7 +206,7 @@ class pmgmt:
     
     def __createButtons(self):
         aSpecs = [(2.5,6,'100%'), (7.5,6,'50%'),
-                  (2.5,4.5,'75%'), (7.5,4.5,'25%')]
+                  (2.5,4.5,'75%'), (7.5,4.5,'25%'), (2.2,3.1,"enter text")]
 
         self.buttons = []
         for (cx,cy,label) in aSpecs:
@@ -255,21 +256,25 @@ class pmgmt:
             newin = highrisk()#
             while True:
                 newin.run()
-    
-            
-    def inputBar(self):
-        self.textB.setText("hi")
-        index = "" ###Blank Message
-        while True:
-            p = self.win.getKey() ###Gets key pressed
-            if p == "Return":
-                return index
-            if p == "BackSpace":
-                index = index[0:len(index) -1] ###Removes last item
-                self.textB.setText(message + " " + index)
-                continue
-            index = index + str(p) ###Adds String
-            self.textB.setText(" " + index)
+        if key == 'enter text':
+            blink = Rectangle(Point(1,2.1),Point(1.1,2.2)) #notifies the user to type
+            blink.setFill('red')
+            blink.draw(self.win)
+            self.textB.setText("")
+            index = "" ###Blank Message
+            while True:
+                p = self.win.getKey() ###Gets key pressed
+                if p == "Return":
+                    return index
+                if p == "BackSpace":
+                    index = index[0:len(index) -1] ###Removes last item
+                    self.textB.setText(" " + index)
+                    continue
+                if p == "space": #adds a space when the space bar is hit!
+                    index = index + " " 
+                    continue
+                index = index + str(p) ###Adds String
+                self.textB.setText(" " + index)
             
     def run(self):
         # Infinite 'event loop' to process button clicks.
@@ -290,8 +295,13 @@ class highrisk:
 
     def __bgimg(self):
         bg = Image(Point(5,5),"gradient.png")
-        bg.draw(self.win) 
-    
+        bg.draw(self.win)
+
+    def __minidsplay(self):
+        head = Rectangle(Point(9,1),Point(9.5,7))
+        head.setFill('white')
+        head.draw(self.win)
+        
     def __createButtons(self):
         aSpecs = [(1.5,6,'Long Term'),
                   (1.5,4.5,'Short Term')]
@@ -316,7 +326,7 @@ class highrisk:
     def __makeJerry(self):
         image = Image(Point(8.3,5),"myrodin.gif")
         image.draw(self.win)
-        text2 = Text(Point(7.8,2.8),"You're a risk taker, I like that.")
+        text2 = Text(Point(7.8,2.5),"You're a risk taker, I like that.")
         text2.setTextColor('white')
         text2.setSize(10)
         text2.setFace("courier")
@@ -332,12 +342,17 @@ class highrisk:
                 if b.clicked(p):
                     return b.getLabel() # method exit
                 
-    def processButton(self, key):
-        # Updates the display of the calculator for press of this key
+    #def processButton(self, key):
         if key == 'Long Term':
-            return "hi"
-            #fill this in
-        
+            self.__minidisplay()
+            self.buttons.deactivate()
+
+    def run(self):
+        # Infinite 'event loop' to process button clicks.
+        while True:
+            key = self.getButton()
+            self.processButton(key)
+            
 class VirtualBroker: #name change
     def __init__(self):
         win = GraphWin("Virtual Broker",700,500)
@@ -434,4 +449,3 @@ class VirtualBroker: #name change
 if __name__ == '__main__':
     theCalc1 = VirtualBroker()
     theCalc1.run()
-
