@@ -136,6 +136,11 @@ class dontbuy:
         reason1.draw(self.win)
         reason1.setSize(13)
         reason1.setFace('courier')
+
+        reason2 = Text(Point(3.5,5),"-Dividend income is insufficient")
+        reason2.draw(self.win)
+        reason2.setSize(13)
+        reason2.setFace('courier')
         
     def getButton(self):
         while True:
