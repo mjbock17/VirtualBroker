@@ -174,12 +174,16 @@ class retain_peGUI(VirtualBroker):
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
+        self.prevScene = self.setScene()
 
     def __createButtons(self):
-        bsort = [(4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
+        bsort = [(1, 1, "Back"), (4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
         self.buttons = []
         for (cx,cy,label) in bsort:
-             self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
         for b in self.buttons:
             b.activate()
     
@@ -213,6 +217,9 @@ class retain_peGUI(VirtualBroker):
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
+
+    def setScene(self):
+        return stockpicking
 
     def processButton(self, key):
         if key == "PE greater than or equal to 18":#
@@ -225,6 +232,11 @@ class retain_peGUI(VirtualBroker):
             newin = divyeild()#
             while True:
                 newin.run()
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
 
 class grow_peGUI(VirtualBroker):
     def __init__(self):
@@ -234,11 +246,15 @@ class grow_peGUI(VirtualBroker):
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
-
+        self.prevScene = self.setScene()
+        
     def __createButtons(self):
-        bsort = [(4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
+        bsort = [(1, 1, "Back"), (4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
         self.buttons = []
         for (cx,cy,label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
              self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
         for b in self.buttons:
             b.activate()
@@ -274,6 +290,9 @@ class grow_peGUI(VirtualBroker):
         question.setSize(15)
         question.setFace('courier')
 
+    def setScene(self):
+        return stockpicking
+
     def processButton(self, key):
         if key == 'PE greater than or equal to 18':#
             self.win.close()#
@@ -285,8 +304,11 @@ class grow_peGUI(VirtualBroker):
             newin = dontbuy()#
             while True:
                 newin.run()
-
-
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
 
 class dontbuy(VirtualBroker):
     def __init__(self):
@@ -346,12 +368,14 @@ class dontbuy(VirtualBroker):
         reason2.setSize(13)
         reason2.setFace('courier')
 
+
     def processButton(self, key):
         if key == 'Return to home page':#
             self.win.close()#
             newin = VirtualBroker()
             while True:
                 newin.run()
+
                 
 class pmgmt(VirtualBroker):
     def __init__(self):
