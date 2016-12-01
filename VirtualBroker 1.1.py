@@ -478,6 +478,9 @@ class buy(VirtualBroker):
             while True:
                 newin.run()
 
+#########################################################################################
+#Henrik's Section
+                
 class pmgmt(VirtualBroker):
     def __init__(self):
         win = GraphWin("Portfolio Management",700,500)#
@@ -577,6 +580,9 @@ class pmgmt(VirtualBroker):
                     newin.run()
             elif newinfo < 50:
                 self.win.close()
+                newin = lowrisk()
+                while True:
+                    newin.run()
         elif key == "Back":
             self.win.close()
             newin = self.prevScene()
@@ -593,6 +599,7 @@ class highrisk(VirtualBroker):
         self.__createstockDisplay()
         self.__createButtons()
         self.__makeJerry()
+        self.__graph()
         self.prevScene = self.setScene()
         
     def __bgimg(self):
@@ -625,31 +632,234 @@ class highrisk(VirtualBroker):
         title.draw(self.win)
         title.setSize(15)#
         title.setStyle("bold")
-        
+
+    def __graph(self):
+        graph = Image(Point(7.5,5),"10yeart.gif")
+        graph.draw(self.win)    
+
     def __makeJerry(self):
-        image = Image(Point(8.3,5),"myrodin.gif")
+        myrec = Rectangle(Point(2.8,2.7),Point(4.8,7.3))
+        myrec.setFill("gold")
+        myrec.draw(self.win)
+        image = Image(Point(3.8,5),"myrodin.gif")
         image.draw(self.win)
-        text2 = Text(Point(7.8,2.5),"You're a risk taker, I like that.")
+        text2 = Text(Point(3.1,2.5),"Try the Stock Market!")
         text2.setTextColor('white')
         text2.setSize(10)
         text2.setFace("courier")
         text2.setStyle("bold")
         text2.draw(self.win)
+        text3 = Text(Point(3.3,2.2),"I recommend a shorter horizon")
+        text3.setTextColor('white')
+        text3.setSize(10)
+        text3.setFace("courier")
+        text3.setStyle("bold")
+        text3.draw(self.win)
 
     def setScene(self):
         return pmgmt
     
     def processButton(self, key):
         if key == 'Long Term':
-            return 0
+            self.win.close()
+            newin = longterm()
         if key == 'Short Term':
-            return 0
+            self.win.close()
+            newin = shortterm()
         elif key == "Back":
             self.win.close()
             newin = self.prevScene()
             while True:
                 newin.run()
 
+class lowrisk(VirtualBroker):
+    def __init__(self):
+        win = GraphWin("Low Risk",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createstockDisplay()
+        self.__createButtons()
+        self.__makeJerry()
+        self.__graph()
+        self.prevScene = self.setScene()
+        
+    def __bgimg(self):
+        bg = Image(Point(5,5),"gradient.gif")
+        bg.draw(self.win)
+
+    def __minidsplay(self):
+        head = Rectangle(Point(9,1),Point(9.5,7))
+        head.setFill('white')
+        head.draw(self.win)
+        
+    def __createButtons(self):
+        aSpecs = [(1, 1, "Back"), (1.5,6,'Long Term'),
+                  (1.5,4.5,'Short Term')]
+
+        self.buttons = []
+        for (cx,cy,label) in aSpecs:
+            if label == "Back":
+                self.buttons.append(Button(self.win,Point(cx,cy),1,1,label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
+        for b in self.buttons:
+            b.activate()
+
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Low Risk Portfolio")#
+        title.draw(self.win)
+        title.setSize(15)#
+        title.setStyle("bold")
+        
+    def __graph(self):
+        graph = Image(Point(7.5,5),"10yeart.gif")
+        graph.draw(self.win)
+        
+    def __makeJerry(self):
+        myrec = Rectangle(Point(2.8,2.7),Point(4.8,7.3))
+        myrec.setFill("gold")
+        myrec.draw(self.win)
+        image = Image(Point(3.8,5),"myrodin.gif")
+        image.draw(self.win)
+        text2 = Text(Point(3.1,2.5),"You're not a risk taker")
+        text2.setTextColor('white')
+        text2.setSize(10)
+        text2.setFace("courier")
+        text2.setStyle("bold")
+        text2.draw(self.win)
+        text3 = Text(Point(3.3,2.2),"I recommend a longer horizon")
+        text3.setTextColor('white')
+        text3.setSize(10)
+        text3.setFace("courier")
+        text3.setStyle("bold")
+        text3.draw(self.win)
+
+    def setScene(self):
+        return pmgmt
+    
+    def processButton(self, key):
+        if key == 'Long Term':
+            self.win.close()
+            newin = longtermlow()
+        if key == 'Short Term':
+            self.win.close()
+            newin = shorttermlow()
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+
+class longtermlow(): 
+    def __init__(self):
+        win = GraphWin("Long Term Low",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")       
+        self.win = win
+        self.__bgimg()
+        self.__createButtons()
+        self.__createDisplay()
+    def __bgimg(self):
+        bg = Image(Point(5,5),"gradient.gif")
+        bg.draw(self.win) 
+
+    def __createDisplay(self):
+        bg = Rectangle(Point(1.4,9.2), Point(8.6,8.2))#
+        bg.setFill('white')#
+        bg.setOutline("gold")#
+        bg.setWidth(4)#
+        bg.draw(self.win)
+        a = Line(Point(5,7),Point(8.9,7))
+        a.draw(self.win)
+        text = Text(Point(5,8.7), "Welcome to Our Virtual Broker!")
+        text.draw(self.win)
+        text.setFace("courier")
+        text.setStyle("bold")
+        text.setSize(18)
+        self.display = text
+        text1 = Text(Point(7,7.2),"Please select a service:")
+        text1.draw(self.win)
+        text1.setFace("courier")
+        text1.setStyle("bold")
+        text1.setSize(14)
+        self.display = text1
+        c = Rectangle(Point(.5,1),Point(3.5,7))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(2,4),"myrodin.gif")
+        image.draw(self.win)
+        text2 = Text(Point(2,1.5),"Hello, my name is Jerry!")
+        text2.setTextColor('white')
+        text2.setSize(10)
+        text2.setFace("courier")
+        text2.setStyle("bold")
+        text2.draw(self.win)
+        self.display = text2
+
+class shorttermlow(): 
+    def __init__(self):
+        win = GraphWin("Short Term Low",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")       
+        self.win = win
+        self.__bgimg()
+        self.__createButtons()
+        self.__createDisplay()
+    def __bgimg(self):
+        bg = Image(Point(5,5),"wood.gif")
+        bg.draw(self.win) 
+
+    def __createButtons(self):
+
+        bsort = [(7,1.5,"Data Analysis"),(7,3,"Portfolio Management"),#
+                 (7,4.5,"Market/Industry Trends"),(7,6,"Stock Picking")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+             self.buttons.append(Button(self.win,Point(cx,cy),4,1.2,label))
+        for b in self.buttons:
+            b.activate()
+
+    def __createDisplay(self):
+        bg = Rectangle(Point(1.4,9.2), Point(8.6,8.2))#
+        bg.setFill('white')#
+        bg.setOutline("gold")#
+        bg.setWidth(4)#
+        bg.draw(self.win)
+        a = Line(Point(5,7),Point(8.9,7))
+        a.draw(self.win)
+        text = Text(Point(5,8.7), "Welcome to Our Virtual Broker!")
+        text.draw(self.win)
+        text.setFace("courier")
+        text.setStyle("bold")
+        text.setSize(18)
+        self.display = text
+        text1 = Text(Point(7,7.2),"Please select a service:")
+        text1.draw(self.win)
+        text1.setFace("courier")
+        text1.setStyle("bold")
+        text1.setSize(14)
+        self.display = text1
+        c = Rectangle(Point(.5,1),Point(3.5,7))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(2,4),"myrodin.gif")
+        image.draw(self.win)
+        text2 = Text(Point(2,1.5),"Hello, my name is Jerry!")
+        text2.setTextColor('white')
+        text2.setSize(10)
+        text2.setFace("courier")
+        text2.setStyle("bold")
+        text2.draw(self.win)
+        self.display = text2
 class Data_Analysis(VirtualBroker):
     def __init__(self):
         #creates window for GUI
