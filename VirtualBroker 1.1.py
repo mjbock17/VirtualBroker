@@ -376,7 +376,6 @@ class dontbuy(VirtualBroker):
             while True:
                 newin.run()
 
-                
 class pmgmt(VirtualBroker):
     def __init__(self):
         win = GraphWin("Portfolio Management",700,500)#
@@ -388,12 +387,16 @@ class pmgmt(VirtualBroker):
         self.__createinputDisplay()
         self.__createButtons()
         self.__makeJerry()
-
+        self.prevScene = self.setScene()
+        
     def __createinputDisplay(self):
-        box1 = Rectangle(Point(1,1), Point(9,2)) ###textbox
+        box1 = Rectangle(Point(3,1), Point(9,2)) ###textbox
         box1.setFill("white")
         box1.draw(self.win)
-        textbox = Text(Point(5,1.5), "") ###Creates a blank textbox
+        textbox2 = Text(Point(4.6,1.5), "enter a risk level between 0 and 100")
+        textbox2.setSize(10)
+        textbox2.draw(self.win)
+        textbox = Text(Point(7.5,1.5), "") ###Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox ###creates a textbox variable
 
@@ -402,14 +405,13 @@ class pmgmt(VirtualBroker):
         bg.draw(self.win) 
     
     def __createButtons(self):
-        aSpecs = [(2.5,6,'100%'), (7.5,6,'50%'),
-                  (2.5,4.5,'75%'), (7.5,4.5,'25%'), (2.2,3.1,"enter text")]
-
+        aSpecs = [(1, 1, "Back"),(2.2,3.1,"enter text")]
         self.buttons = []
         for (cx,cy,label) in aSpecs:
-            self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
-            
-        # activate all buttons
+            if label == "Back":
+                self.buttons.append(Button(self.win,Point(cx,cy),1,1,label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
         for b in self.buttons:
             b.activate()
 
@@ -446,29 +448,39 @@ class pmgmt(VirtualBroker):
                 return index
             if p == "BackSpace":
                 index = index[0:len(index) -1] ###Removes last item
-                self.textB.setText(message + " " + index)
+                self.textB.setText(" " + index)
                 continue
             if p == "space": #adds a space when the space bar is hit!
                 index = index + " " 
                 continue
             index = index + str(p) ###Adds String
             self.textB.setText(" " + index)
-                
+            
+    def setScene(self):
+        return VirtualBroker
+    
     def processButton(self, key):
-        # Updates the display of the calculator for press of this key
-        if key == '100%':
-            self.win.close()#
-            newin = highrisk()#
-            while True:
-                newin.run()
+        # Updates the display for press of this key
         if key == 'enter text':
-            blink = Rectangle(Point(1,2.1),Point(1.1,2.2)) #notifies the user to type
+            blink = Rectangle(Point(2.5,2.1),Point(2.6,2.2)) #notifies the user to type
             blink.setFill('red')
             blink.draw(self.win)
             information = self.inputBar()
+            newinfo = int(information)
             blink.undraw()
+            if 50 <= newinfo:
+                self.win.close()
+                newin = highrisk()
+                while True:
+                    newin.run()
+            elif newinfo < 50:
+                self.win.close()
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
             
-
 class highrisk(VirtualBroker):
     def __init__(self):
         win = GraphWin("High Risk",700,500)#
@@ -479,7 +491,8 @@ class highrisk(VirtualBroker):
         self.__createstockDisplay()
         self.__createButtons()
         self.__makeJerry()
-
+        self.prevScene = self.setScene()
+        
     def __bgimg(self):
         bg = Image(Point(5,5),"gradient.png")
         bg.draw(self.win)
@@ -490,14 +503,15 @@ class highrisk(VirtualBroker):
         head.draw(self.win)
         
     def __createButtons(self):
-        aSpecs = [(1.5,6,'Long Term'),
+        aSpecs = [(1, 1, "Back"), (1.5,6,'Long Term'),
                   (1.5,4.5,'Short Term')]
 
         self.buttons = []
         for (cx,cy,label) in aSpecs:
-            self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
-            
-        # activate all buttons
+            if label == "Back":
+                self.buttons.append(Button(self.win,Point(cx,cy),1,1,label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
         for b in self.buttons:
             b.activate()
 
@@ -519,11 +533,20 @@ class highrisk(VirtualBroker):
         text2.setFace("courier")
         text2.setStyle("bold")
         text2.draw(self.win)
-                
-##    #def processButton(self, key):
-##        if key == 'Long Term':
-##            self.__minidisplay()
-##            self.buttons.deactivate() ###Wasn't sure what this was, just commneted it out.
+
+    def setScene(self):
+        return pmgmt
+    
+    def processButton(self, key):
+        if key == 'Long Term':
+            return 0
+        if key == 'Short Term':
+            return 0
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
 
 class Data_Analysis(VirtualBroker):
     def __init__(self):
