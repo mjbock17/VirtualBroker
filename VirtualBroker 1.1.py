@@ -11,7 +11,7 @@ class VirtualBroker: #name change
         self.__createButtons()
         self.__createDisplay()
     def __bgimg(self):
-        bg = Image(Point(5,5),"wood.png")
+        bg = Image(Point(5,5),"wood.gif")
         bg.draw(self.win) 
 
     def __createButtons(self):
@@ -401,7 +401,7 @@ class pmgmt(VirtualBroker):
         self.textB = textbox ###creates a textbox variable
 
     def __bgimg(self):
-        bg = Image(Point(5,5),"gradient.png")
+        bg = Image(Point(5,5),"gradient.gif")
         bg.draw(self.win) 
     
     def __createButtons(self):
@@ -494,7 +494,7 @@ class highrisk(VirtualBroker):
         self.prevScene = self.setScene()
         
     def __bgimg(self):
-        bg = Image(Point(5,5),"gradient.png")
+        bg = Image(Point(5,5),"gradient.gif")
         bg.draw(self.win)
 
     def __minidsplay(self):
