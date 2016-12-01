@@ -102,10 +102,8 @@ class stockpicking(VirtualBroker):
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
-        self.prevScene = self.setScene()
-        
+        self.prevScene = self.setScene()  
     def __createButtons(self):
-
         bsort = [(1, 1, "Back"), (4,2.5,"Grow Market Share"),(4,5,"Retain Market Share")]
         self.buttons = []
         for (cx,cy,label) in bsort:
@@ -115,7 +113,6 @@ class stockpicking(VirtualBroker):
                 self.buttons.append(Button(self.win,Point(cx, cy),4,2,label)) 
         for b in self.buttons:
             b.activate()
-    
     def __createstockDisplay(self):
         head = Rectangle(Point(1,8),Point(9,9))
         head.setFill('white')
@@ -132,24 +129,19 @@ class stockpicking(VirtualBroker):
         c.draw(self.win)
         image = Image(Point(8,5),"myrodin.gif")
         image.draw(self.win)
-
         questionbox = Rectangle(Point(1,7.5),Point(6.75,6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
-
         question = Text(Point(3.8,7.2),"Do you expect the company to retain its")
         question.draw(self.win)
         question.setSize(11)
         question.setFace('courier')
-
         question = Text(Point(3.8,6.6),"market share or to grow its market share?")
         question.draw(self.win)
         question.setSize(11)
         question.setFace('courier')
-
     def setScene(self):
-        return VirtualBroker
-    
+        return VirtualBroker   
     def processButton(self, key): 
         if key == 'Retain Market Share':
             self.win.close()
@@ -176,18 +168,16 @@ class retain_peGUI(VirtualBroker):
         self.__createstockDisplay()
         self.__createButtons()
         self.prevScene = self.setScene()
-
     def __createButtons(self):
-        bsort = [(1, 1, "Back"), (4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
+        bsort = [(1, 1, "Back"), (4,3.25,"PE greater than or equal to 18"),(4,5,"PE less than 18, greater than zero"),(4,1.5,"Negative/Zero PE")]
         self.buttons = []
         for (cx,cy,label) in bsort:
             if label == "Back":
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
-                self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+                self.buttons.append(Button(self.win,Point(cx,cy),4,1.5,label))
         for b in self.buttons:
             b.activate()
-    
     def __createstockDisplay(self):
         head = Rectangle(Point(1,8),Point(9,9))
         head.setFill('white')
@@ -204,33 +194,33 @@ class retain_peGUI(VirtualBroker):
         c.draw(self.win)
         image = Image(Point(8,5),"myrodin.gif")
         image.draw(self.win)
-
         questionbox = Rectangle(Point(1,7.5),Point(6.75,6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
-
         question = Text(Point(3.8,7.1),"What is the PE ratio?")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-
         question = Text(Point(3.8,6.7),"(Price over Earnings)")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-
     def setScene(self):
         return stockpicking
-
     def processButton(self, key):
         if key == "PE greater than or equal to 18":#
             self.win.close()#
             newin = dontbuy()
             while True:
                 newin.run()
-        elif key == 'PE less than 18':#
+        elif key == 'PE less than 18, greater than zero':#
             self.win.close()#
             newin = divyeild()#
+            while True:
+                newin.run()
+        elif key == 'Negative/Zero PE':
+            self.win.close()
+            newin = dontbuy()
             while True:
                 newin.run()
         elif key == "Back":
@@ -247,19 +237,17 @@ class grow_peGUI(VirtualBroker):
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
-        self.prevScene = self.setScene()
-        
+        self.prevScene = self.setScene()    
     def __createButtons(self):
-        bsort = [(1, 1, "Back"), (4,2.5,"PE greater than or equal to 18"),(4,5,"PE less than 18")]
+        bsort = [(1, 1, "Back"), (4,3.25,"PE greater than or equal to 18"),(4,5,"PE less than 18, greater than zero"),(4,1.5,"Negative/Zero PE")]
         self.buttons = []
         for (cx,cy,label) in bsort:
             if label == "Back":
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
-             self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+                self.buttons.append(Button(self.win,Point(cx,cy),4,1.5,label))
         for b in self.buttons:
             b.activate()
-    
     def __createstockDisplay(self):
         head = Rectangle(Point(1,8),Point(9,9))
         head.setFill('white')
@@ -276,31 +264,96 @@ class grow_peGUI(VirtualBroker):
         c.draw(self.win)
         image = Image(Point(8,5),"myrodin.gif")
         image.draw(self.win)
-
         questionbox = Rectangle(Point(1,7.5),Point(6.75,6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
-
         question = Text(Point(3.8,7.1),"What is the PE ratio?")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-
         question = Text(Point(3.8,6.7),"(Price over Earnings)")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-
     def setScene(self):
         return stockpicking
-
     def processButton(self, key):
         if key == 'PE greater than or equal to 18':#
             self.win.close()#
             newin = moreinfo()
             while True:
                 newin.run()
-        elif key == 'PE less than 18':#
+        elif key == 'PE less than 18, greater than zero':#
+            self.win.close()#
+            newin = dontbuy()#
+            while True:
+                newin.run()
+        elif key == "Negative/Zero PE":
+            self.win.close()
+            newin = strongreason()
+            while True:
+                newin.run()
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+
+class strongreason(VirtualBroker):
+    def __init__(self):
+        win = GraphWin("Stock Picking(5)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+        self.prevScene = self.setScene()      
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"), (4,2.5,"No"),(4,5,"Yes")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+        for b in self.buttons:
+            b.activate()
+    def __createstockDisplay(self):
+        head = Rectangle(Point(.3,8),Point(9.7,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Stock Has Negative Earnings")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+        questionbox = Rectangle(Point(1,7.5),Point(6.75,6.25))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+        question = Text(Point(3.8,7.1),"Are you certain that this")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+        question = Text(Point(3.8,6.7),"company will recover and grow?")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+    def setScene(self):
+        return stockpicking
+    def processButton(self, key):
+        if key == 'Yes':#
+            self.win.close()#
+            newin = buy()
+            while True:
+                newin.run()
+        elif key == 'No':#
             self.win.close()#
             newin = dontbuy()#
             while True:
@@ -318,16 +371,14 @@ class dontbuy(VirtualBroker):
         win.setBackground("slategray")
         self.win = win
         self.__createstockDisplay()
-        self.__createButtons()
-
+        self.__createButtons()    
     def __createButtons(self):
-        bsort = [(4,2,"Return to home page")]
+        bsort = [(2,1,"Return to home page")]
         self.buttons = []
         for (cx,cy,label) in bsort:
-             self.buttons.append(Button(self.win,Point(cx,cy),4,1,label))
+            self.buttons.append(Button(self.win,Point(cx,cy),2.4,1,label))
         for b in self.buttons:
-            b.activate()
-    
+            b.activate() 
     def __createstockDisplay(self):
         head = Rectangle(Point(1,8),Point(9,9))
         head.setFill('white')
@@ -344,32 +395,82 @@ class dontbuy(VirtualBroker):
         c.draw(self.win)
         image = Image(Point(8,5),"myrodin.gif")
         image.draw(self.win)
-
         questionbox = Rectangle(Point(1,7.5),Point(6.75,6.2))
         questionbox.setFill('white')
         questionbox.draw(self.win)
-
         question = Text(Point(3.8,7.1),"to NOT buy this stock,")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-
         question1 = Text(Point(3.8,6.5),"for these reasons:")
         question1.draw(self.win)
         question1.setSize(15)
         question1.setFace('courier')
-
         reason1 = Text(Point(3.8, 5.8),"-The stock is most likely overpriced")
         reason1.draw(self.win)
         reason1.setSize(13)
         reason1.setFace('courier')
-
         reason2 = Text(Point(3.5,5),"-Dividend income is insufficient")
         reason2.draw(self.win)
         reason2.setSize(13)
         reason2.setFace('courier')
+        reason3 = Text(Point(3.5,4.25),"-The stock is not likely to grow")
+        reason3.draw(self.win)
+        reason3.setSize(13)
+        reason3.setFace('courier')
+    def processButton(self, key):
+        if key == 'Return to home page':#
+            self.win.close()#
+            newin = VirtualBroker()
+            while True:
+                newin.run()
 
-
+class buy(VirtualBroker):
+    def __init__(self):
+        win = GraphWin("Stock Picking(4)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()     
+    def __createButtons(self):
+        bsort = [(2,1,"Return to home page")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+            self.buttons.append(Button(self.win,Point(cx,cy),2.4,1,label))
+        for b in self.buttons:
+            b.activate()
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "We Advise...")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+        questionbox = Rectangle(Point(1,7.5),Point(6.75,6.75))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+        question = Text(Point(3.8,7.1),"To go ahead and BUY this stock")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+        reason1 = Text(Point(3.8, 5.8),"Although we advise you to buy,")
+        reason1.draw(self.win)
+        reason1.setSize(13)
+        reason1.setFace('courier')
+        reason2 = Text(Point(3.5,5),"earnings are never guaranteed")
+        reason2.draw(self.win)
+        reason2.setSize(13)
+        reason2.setFace('courier')
     def processButton(self, key):
         if key == 'Return to home page':#
             self.win.close()#
