@@ -82,6 +82,7 @@ class VirtualBroker: #name change
             while True:
                 newin.run()
         elif key == 'Data Analysis':
+            self.win.close()
             newin = Data_Analysis()
             while True:
                 newin.run()
