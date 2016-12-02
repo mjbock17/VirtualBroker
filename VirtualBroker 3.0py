@@ -94,6 +94,8 @@ class VirtualBroker: #name change
             key = self.getButton()
             self.processButton(key)
 
+#######################################################################
+            ## Danny's Section
 class stockpicking(VirtualBroker):
     def __init__(self):
         win = GraphWin("Stock Picking",700,500)
@@ -215,7 +217,7 @@ class retain_peGUI(VirtualBroker):
                 newin.run()
         elif key == 'PE less than 18, greater than zero':#
             self.win.close()#
-            newin = divyeild()#
+            newin = divyield()#
             while True:
                 newin.run()
         elif key == 'Negative/Zero PE':
@@ -364,6 +366,108 @@ class strongreason(VirtualBroker):
             while True:
                 newin.run()
 
+class divyield(VirtualBroker):
+    def __init__(self):
+        win = GraphWin("Stock Picking(6)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+        self.prevScene = self.setScene()
+        self.__createinputDisplay()
+
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"),(3.4,3.5,"Enter Text")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+            self.buttons.append(Button(self.win,Point(cx,cy),1.1,1,label))
+        for b in self.buttons:
+            b.activate()
+    def __createstockDisplay(self):
+        head = Rectangle(Point(.2,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(4.6,8.5), "Dividend Analysis")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+        questionbox = Rectangle(Point(.2,7.5),Point(6.9,6))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+        question = Text(Point(3.65,6.8),"Please enter this company's dividend \nyield ratio(round to nearest hundredth) \nthen press enter")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+
+    def __createinputDisplay(self):
+        box1 = Rectangle(Point(4,3), Point(6,4)) ###textbox
+        box1.setFill("white")
+        box1.draw(self.win)
+        textbox2 = Text(Point(4.6,1.5), "")
+        textbox2.setSize(10)
+        textbox2.draw(self.win)
+        textbox = Text(Point(5,3.5), "") ###Creates a blank textbox
+        textbox.draw(self.win)
+        self.textB = textbox ###creates a textbox variable
+
+
+    def inputBar(self):
+        self.textB.setText("")
+        index = "" ###Blank Message
+        while True:
+            p = self.win.getKey() ###Gets key pressed
+            if p == "Return":
+                return index
+            if p == "BackSpace":
+                index = index[0:len(index) -1] ###Removes last item
+                self.textB.setText(" " + index)
+                continue
+            if p == "space": #adds a space when the space bar is hit!
+                index = index + " " 
+                continue
+            if p == "period":
+                index = index + "."
+                self.textB.setText(" " + index)
+                continue
+            index = index + str(p) ###Adds String
+            self.textB.setText(" " + index)
+            
+    def setScene(self):
+        return stockpicking
+        
+    def processButton(self, key):
+        if key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+        elif key == "Enter Text":
+            blink = Rectangle(Point(4.1,4.1),Point(4.2,4.2)) #notifies the user to type
+            blink.setFill('red')
+            blink.draw(self.win)
+            information = self.inputBar()
+            divyield = float(information)
+            blink.undraw()
+            if divyield>1.5:
+                self.win.close()
+                newin = buy()
+                while True:
+                    newin.run()
+            else:
+                self.win.close()
+                newin = dontbuy()
+                while True:
+                    newin.run()
+                    
 class dontbuy(VirtualBroker):
     def __init__(self):
         win = GraphWin("Stock Picking(4)",700,500)
@@ -418,6 +522,10 @@ class dontbuy(VirtualBroker):
         reason3.draw(self.win)
         reason3.setSize(13)
         reason3.setFace('courier')
+        reason4 = Text(Point(3.6,3.3),"-This company is incurring a loss\nand is not expected to grow")
+        reason4.draw(self.win)
+        reason4.setSize(13)
+        reason4.setFace('courier')
     def processButton(self, key):
         if key == 'Return to home page':#
             self.win.close()#
@@ -463,14 +571,10 @@ class buy(VirtualBroker):
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-        reason1 = Text(Point(3.8, 5.8),"Although we advise you to buy,")
+        reason1 = Text(Point(3.8, 5.8),"Although we advise you to buy,\nearnings are never guaranteed")
         reason1.draw(self.win)
         reason1.setSize(13)
         reason1.setFace('courier')
-        reason2 = Text(Point(3.5,5),"earnings are never guaranteed")
-        reason2.draw(self.win)
-        reason2.setSize(13)
-        reason2.setFace('courier')
     def processButton(self, key):
         if key == 'Return to home page':#
             self.win.close()#
