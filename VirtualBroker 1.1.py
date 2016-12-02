@@ -1142,11 +1142,11 @@ class Data_Analysis(VirtualBroker):
         return VirtualBroker
 
     def processButton(self, key):
-        if key == 'C':
-            self.display.setText("")
-        elif key == 'S&P 500':
-            ans = linSearch(21,mynums)
-            self.display.setText(ans)
+        if key == 'S&P 500':
+            self.win.close()
+            newin = SandP500()
+            while True:
+                newin.run()
         elif key == 'Button 2':
             ans1 = binSearch(21,mynums)
             self.display.setText(ans1)
@@ -1165,7 +1165,55 @@ class Data_Analysis(VirtualBroker):
             # Normal key press, append it to the end of the display
             self.display.setText(text+key)
 
+class SandP500(VirtualBroker):
+    def __init__(self):
+        #creates window for GUI
+        win = GraphWin("Data Analysis",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createButtons()
+        self.__createDisplay()
+        self.prevScene = self.setScene()
+
+    def __bgimg(self):
+        bg = Image(Point(5,5),"wood.gif")
+        bg.draw(self.win)
+
+    def __createButtons(self):
+        bsort = [(1, 1, "Back")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),4,.75,label))
+        for b in self.buttons:
+            b.activate()
+            
+    def __createDisplay(self):
+        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "S&P500")
+        title.draw(self.win)
+        title.setSize(15)
+        title.setStyle("bold")
+
+    def setScene(self):
+        return Data_Analysis
+
+    def processButton(self, key):
+
+        if key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+
 ###################################################################################################
+
 if __name__ == '__main__':
     theCalc1 = VirtualBroker()
     theCalc1.run()
