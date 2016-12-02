@@ -634,6 +634,10 @@ class highrisk(VirtualBroker):
         title.setStyle("bold")
 
     def __graph(self):
+        a = Rectangle(Point(5.25,2.7),Point(9.725,7.25))
+        a.setFill("Light Steel Blue")
+        a.setOutline("gold")
+        a.draw(self.win)
         graph = Image(Point(7.5,5),"sp500.gif")
         graph.draw(self.win)    
 
@@ -721,6 +725,10 @@ class lowrisk(VirtualBroker):
         title.setStyle("bold")
         
     def __graph(self):
+        a = Rectangle(Point(5.25,2.7),Point(9.725,7.25))
+        a.setFill("Light Steel Blue")
+        a.setOutline("gold")
+        a.draw(self.win)
         graph = Image(Point(7.5,5),"10yeart.gif")
         graph.draw(self.win)
         
