@@ -81,13 +81,11 @@ class VirtualBroker: #name change
             newin = pmgmt()#
             while True:
                 newin.run()
-        elif key == 'Data Analysis':
+        elif key == 'Market/Industry Trends':
             self.win.close()
-            newin = Data_Analysis()
+            newin = MarketIndustryTrends()
             while True:
                 newin.run()
-        else:
-            self.display.setText(text+key)
             
     def run(self):
         while True:
@@ -1192,10 +1190,10 @@ class lrst(VirtualBroker):
                 newin.run()
                 
 ###################################################################################################
-class Data_Analysis(VirtualBroker):
+class MarketIndustryTrends(VirtualBroker):
     def __init__(self):
         #creates window for GUI
-        win = GraphWin("Data Analysis",700,500)
+        win = GraphWin("Market/Industry Trends",700,500)
         win.setCoords(0,0,10,10)
         win.setBackground("slategray")
         self.win = win
@@ -1245,7 +1243,7 @@ class Data_Analysis(VirtualBroker):
         head = Rectangle(Point(1.5,8),Point(8.5,9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5,8.5), "Data Analysis")
+        title = Text(Point(5,8.5), "Market/Industry Trends")
         title.draw(self.win)
         title.setSize(15)
         title.setStyle("bold")
@@ -1280,7 +1278,7 @@ class Data_Analysis(VirtualBroker):
 class SandP500(VirtualBroker):
     def __init__(self):
         #creates window for GUI
-        win = GraphWin("Data Analysis",700,500)
+        win = GraphWin("SandP500",700,500)
         win.setCoords(0,0,10,10)
         win.setBackground("slategray")
         self.win = win
@@ -1292,6 +1290,13 @@ class SandP500(VirtualBroker):
     def __bgimg(self):
         bg = Image(Point(5,5),"wood.gif")
         bg.draw(self.win)
+
+    '''def __graph(self):
+        a = Rectangle(Point(3.7,1),Point(9.3,7))
+        a.setFill("black")
+        a.draw(self.win)
+        graph = Image(Point(6.5,4),"hrlt.gif")
+        graph.draw(self.win)'''
 
     def __createButtons(self):
         bsort = [(1, 1, "Back")]
@@ -1314,7 +1319,7 @@ class SandP500(VirtualBroker):
         title.setStyle("bold")
 
     def setScene(self):
-        return Data_Analysis
+        return MarketIndustryTrends 
 
     def processButton(self, key):
 
@@ -1325,6 +1330,7 @@ class SandP500(VirtualBroker):
                 newin.run()
 
 ###################################################################################################
+
 
 if __name__ == '__main__':
     theCalc1 = VirtualBroker()
