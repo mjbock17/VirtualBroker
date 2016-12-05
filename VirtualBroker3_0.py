@@ -178,7 +178,7 @@ class VirtualBroker: #name change
     # def end(self):
 
 #######################################################################
-            ## Danny's Section
+## Danny's Section
 class stockpicking(VirtualBroker):
     def __init__(self):
         win = GraphWin("Stock Picking",700,500)
@@ -243,8 +243,7 @@ class stockpicking(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
-
-
+            
 class retain_peGUI(VirtualBroker):
     def __init__(self):
         win = GraphWin("Stock Picking(2)",700,500)
@@ -287,7 +286,7 @@ class retain_peGUI(VirtualBroker):
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-        question = Text(Point(3.8,6.7),"(Price over Earnings)")
+        question = Text(Point(3.8,6.7),"(consult Yahoo Finance)")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
@@ -357,7 +356,7 @@ class grow_peGUI(VirtualBroker):
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-        question = Text(Point(3.8,6.7),"(Price over Earnings)")
+        question = Text(Point(3.8,6.7),"(consult Yahoo Finance)")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
@@ -366,7 +365,7 @@ class grow_peGUI(VirtualBroker):
     def processButton(self, key):
         if key == 'PE greater than or equal to 18':#
             self.win.close()#
-            newin = moreinfo()
+            newin = analyst_opinion()
             while True:
                 newin.run()
         elif key == 'PE less than 18, greater than zero':#
@@ -377,6 +376,66 @@ class grow_peGUI(VirtualBroker):
         elif key == "Negative/Zero PE":
             self.win.close()
             newin = strongreason()
+            while True:
+                newin.run()
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+class analyst_opinion(VirtualBroker):
+    def __init__(self):
+        win = GraphWin("Stock Picking(8)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+        self.prevScene = self.setScene()      
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"), (4,2.5,"generally negative"),(4,5,"generally positive")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),4,2,label))
+        for b in self.buttons:
+            b.activate()
+    def __createstockDisplay(self):
+        head = Rectangle(Point(.15,8),Point(9.85,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Financial Analyst's Opinions")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+        questionbox = Rectangle(Point(.15,7.85),Point(6.9,6.25))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+        question = Text(Point(3.55,7.1),"What is the general consensus between\nfinancial analysts on this stock?\nDo they suggest a buy?")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+    def setScene(self):
+        return stockpicking
+    def processButton(self, key):
+        if key == 'generally positive':#
+            self.win.close()#
+            newin = buy()
+            while True:
+                newin.run()
+        elif key == 'generally negative':#
+            self.win.close()#
+            newin = dontbuy()#
             while True:
                 newin.run()
         elif key == "Back":
@@ -462,10 +521,13 @@ class divyield(VirtualBroker):
         self.__createinputDisplay()
 
     def __createButtons(self):
-        bsort = [(1, 1, "Back"),(3.4,3.5,"Enter Text")]
+        bsort = [(1, 1, "Back"),(2.8,3.5,"Click to Enter")]
         self.buttons = []
         for (cx,cy,label) in bsort:
-            self.buttons.append(Button(self.win,Point(cx,cy),1.1,1,label))
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
         for b in self.buttons:
             b.activate()
     def __createstockDisplay(self):
@@ -529,28 +591,32 @@ class divyield(VirtualBroker):
         return stockpicking
         
     def processButton(self, key):
-        if key == "Back":
-            self.win.close()
-            newin = self.prevScene()
-            while True:
-                newin.run()
-        elif key == "Enter Text":
-            blink = Rectangle(Point(4.1,4.1),Point(4.2,4.2)) #notifies the user to type
-            blink.setFill('red')
-            blink.draw(self.win)
-            information = self.inputBar()
-            divyield = float(information)
-            blink.undraw()
-            if divyield>1.5:
+        try:
+            if key == "Back":
                 self.win.close()
-                newin = buy()
+                newin = self.prevScene()
                 while True:
                     newin.run()
-            else:
-                self.win.close()
-                newin = dontbuy()
-                while True:
-                    newin.run()
+            elif key == "Click to Enter":
+                blink = Rectangle(Point(4.1,4.1),Point(4.2,4.2)) #notifies the user to type
+                blink.setFill('red')
+                blink.draw(self.win)
+                information = self.inputBar()
+                divyield = float(information)
+                blink.undraw()
+                if divyield>1.5:
+                    self.win.close()
+                    newin = buy()
+                    while True:
+                        newin.run()
+                else:
+                    self.win.close()
+                    newin = dontbuy()
+                    while True:
+                        newin.run()
+        except:
+            error = Text(Point(4.5,2.5),"ERROR. Please enter a numeric value")
+            error.draw(self.win)
                     
 class dontbuy(VirtualBroker):
     def __init__(self):
@@ -626,7 +692,7 @@ class buy(VirtualBroker):
         self.__createstockDisplay()
         self.__createButtons()     
     def __createButtons(self):
-        bsort = [(2,1,"Return to home page")]
+        bsort = [(2,1,"Return to home page"),(3.8,4.5,"Projected Earnings")]
         self.buttons = []
         for (cx,cy,label) in bsort:
             self.buttons.append(Button(self.win,Point(cx,cy),2.4,1,label))
@@ -660,11 +726,131 @@ class buy(VirtualBroker):
         reason1.setSize(13)
         reason1.setFace('courier')
     def processButton(self, key):
-        if key == 'Return to home page':#
+        if key == 'Projected Earnings':
+            self.win.close()
+            newin = projearn()
+            while True:
+                newin.run()
+        elif key == 'Return to home page':#
             self.win.close()#
             newin = VirtualBroker()
             while True:
                 newin.run()
+
+class projearn(VirtualBroker):
+    def __init__(self):
+        win = GraphWin("Stock Picking(10)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+        self.prevScene = self.setScene()
+        self.__createinputDisplay()
+
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"),(3.4,5.3,"Click to Enter")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),2,1,label))
+        for b in self.buttons:
+            b.activate()
+    def __createstockDisplay(self):
+        head = Rectangle(Point(1,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(5,8.5), "Projected Earnings")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+        questionbox = Rectangle(Point(.2,7),Point(6.9,6))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+        question = Text(Point(3.6,6.5),"Please enter this company's current stock price")
+        question.draw(self.win)
+        question.setSize(11)
+        question.setFace('courier')
+
+    def __createinputDisplay(self):
+        box1 = Rectangle(Point(4.7,4.8), Point(6.7,5.8)) ###textbox
+        box1.setFill("white")
+        box1.draw(self.win)
+        textbox2 = Text(Point(4.6,1.5), "")
+        textbox2.setSize(10)
+        textbox2.draw(self.win)
+        textbox = Text(Point(5.7,5.3), "") ###Creates a blank textbox
+        textbox.draw(self.win)
+        self.textB = textbox ###creates a textbox variable
+
+
+    def inputBar(self):
+        self.textB.setText("")
+        index = "" ###Blank Message
+        while True:
+            p = self.win.getKey() ###Gets key pressed
+            if p == "Return":
+                return index
+            if p == "BackSpace":
+                index = index[0:len(index) -1] ###Removes last item
+                self.textB.setText(" " + index)
+                continue
+            if p == "space": #adds a space when the space bar is hit!
+                index = index + " " 
+                continue
+            if p == "period":
+                index = index + "."
+                self.textB.setText(" " + index)
+                continue
+            index = index + str(p) ###Adds String
+            self.textB.setText(" " + index)
+            
+    def setScene(self):
+        return buy
+        
+    def processButton(self, key):
+        try:
+            if key == "Back":
+                self.win.close()
+                newin = self.prevScene()
+                while True:
+                    newin.run()
+            elif key == "Click to Enter":
+                blink = Rectangle(Point(2.3,5.8),Point(2.2,5.9)) #notifies the user to type
+                blink.setFill('red')
+                blink.draw(self.win)
+                information = self.inputBar()
+                price = float(information)
+                blink.undraw()
+                fiveper = price*1.05-price
+                nfiveper = "%.2f" % fiveper
+                tenper = price*1.1-price
+                ntenper = "%.2f" % tenper
+                fifteenper = price*1.15-price
+                nfifteenper = "%.2f" % fifteenper
+                twentyper = price*1.2-price
+                ntwentyper = "%.2f" % twentyper
+                five = Text(Point(4,4),"-Earnings of five percent: $"+nfiveper)
+                five.draw(self.win)
+                ten = Text(Point(4,3),"-Earnings of ten percent: $"+ntenper)
+                ten.draw(self.win)
+                fifteen = Text(Point(4,2),"-Earnings of fifteen percent: $"+nfifteenper)
+                fifteen.draw(self.win)
+                twenty = Text(Point(4,1),"-Earnings of twenty percent: $"+ntwentyper)
+                twenty.draw(self.win)
+        except:
+            error = Text(Point(4.5,2.5),"ERROR. Please enter a numeric value")
+            error.draw(self.win)
 
 #########################################################################################
 #Henrik's Section
@@ -754,28 +940,33 @@ class pmgmt(VirtualBroker):
     
     def processButton(self, key):
         # Updates the display for press of this key
-        if key == 'enter text':
-            blink = Rectangle(Point(2.5,2.1),Point(2.6,2.2)) #notifies the user to type
-            blink.setFill('red')
-            blink.draw(self.win)
-            information = self.inputBar()
-            newinfo = int(information)
-            blink.undraw()
-            if 50 <= newinfo:
+        try:
+            if key == 'enter text':
+                blink = Rectangle(Point(2.5,2.1),Point(2.6,2.2)) #notifies the user to type
+                blink.setFill('red')
+                blink.draw(self.win)
+                information = self.inputBar()
+                newinfo = int(information)
+                blink.undraw()
+                if 50 <= newinfo:
+                    self.win.close()
+                    newin = highrisk()
+                    while True:
+                        newin.run()
+                elif newinfo < 50:
+                    self.win.close()
+                    newin = lowrisk()
+                    while True:
+                        newin.run()
+            elif key == "Back":
                 self.win.close()
-                newin = highrisk()
+                newin = self.prevScene()
                 while True:
                     newin.run()
-            elif newinfo < 50:
-                self.win.close()
-                newin = lowrisk()
-                while True:
-                    newin.run()
-        elif key == "Back":
-            self.win.close()
-            newin = self.prevScene()
-            while True:
-                newin.run()
+        except:
+            error = Text(Point(6,.6),"ERROR. Please enter a numeric value")
+            error.draw(self.win)
+            error.setTextColor('white')
             
 class highrisk(VirtualBroker):
     def __init__(self):
