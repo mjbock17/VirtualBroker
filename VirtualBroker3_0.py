@@ -70,7 +70,7 @@ class VirtualBroker: #name change
                     return b.getLabel()
     
     def processButton(self, key):
-        text = self.display.getText()  
+        text = self.display.getText()  #Need?
         if key == 'Stock Picking':#
             self.win.close()##
             newin = stockpicking()
