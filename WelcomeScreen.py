@@ -59,9 +59,4 @@ class Welcome(VirtualBroker):
             index = index + str(p) ###Adds String
             self.textB.setText(" " + index)
 
-    def run(self):
-        while True:
-            key = self.getButton()
-            self.processButton(key)
-
 Welcome()

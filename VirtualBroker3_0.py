@@ -1377,13 +1377,6 @@ class SandP500(VirtualBroker):
         bg = Image(Point(5,5),"wood.gif")
         bg.draw(self.win)
 
-    '''def __graph(self):
-        a = Rectangle(Point(3.7,1),Point(9.3,7))
-        a.setFill("black")
-        a.draw(self.win)
-        graph = Image(Point(6.5,4),"hrlt.gif")
-        graph.draw(self.win)'''
-
     def __createButtons(self):
         bsort = [(1, 1, "Back")]
         self.buttons = []
@@ -1396,7 +1389,7 @@ class SandP500(VirtualBroker):
             b.activate()
             
     def __createDisplay(self):
-        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head = Rectangle(Point(1.5, 8),Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
         title = Text(Point(5,8.5), "S&P500")
@@ -1404,11 +1397,17 @@ class SandP500(VirtualBroker):
         title.setSize(15)
         title.setStyle("bold")
 
+        # Create Image
+        a = Rectangle(Point(3.7,1),Point(9.3,7))
+        a.setFill("black")
+        a.draw(self.win)
+        graph = Image(Point(6.5,4), "sp500.gif")
+        graph.draw(self.win)
+
     def setScene(self):
         return MarketIndustryTrends 
 
     def processButton(self, key):
-
         if key == "Back":
             self.win.close()
             newin = self.prevScene()
