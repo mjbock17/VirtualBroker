@@ -1,17 +1,14 @@
 from graphics import *
 from button import Button
 
-class Welcome():
-
+class Welcome:
     def __init__(self):
         win = GraphWin("Welcome", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
         self.__createDisplay()
-        filename = self.inputBar()
-        stocklist = open(filename, "w")
-        stocklist.close()
+        self.__createFile()
         self.win.close()
 
     def __createDisplay(self):
@@ -35,28 +32,33 @@ class Welcome():
         text1.draw(self.win)
         self.textB = text1
 
+    def __createFile(self):
+        filename = self.inputBar()
+        stocklist = open(str(filename) + ".txt", "w")
+        stocklist.close()
+
     def inputBar(self):
         self.textB.setText("")
-        index = ""  #Blank Message
+        index = ""  # Blank Message
         while True:
-            p = self.win.getKey()  #Gets key pressed
+            p = self.win.getKey()  # Gets key pressed
             if p == "Return":
                 return index
             if p == "BackSpace":
-                index = index[0:len(index) -1]  #Removes last item
+                index = index[0:len(index) - 1]  # Removes last item
                 self.textB.setText(" " + index)
                 continue
             if p == "space":  # adds a space when the space bar is hit!
-                index = index + " "
+                index += " "
                 continue
             if p == "period":
-                index = index + "."
+                index += "."
                 self.textB.setText(" " + index)
                 continue
-            if p == "Shift_L" or p =="Shift_R":
+            if p == "Shift_L" or p == "Shift_R":
                 self.textB.setText(" " + index)
                 continue
-            index = index + str(p) ###Adds String
+            index += str(p)  # Adds String
             self.textB.setText(" " + index)
 
 class VirtualBroker: #name change
