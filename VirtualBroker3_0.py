@@ -77,7 +77,7 @@ class VirtualBroker: #name change
 
     def __createButtons(self):
 
-        bsort = [(7,1.5,"Data Analysis"),(7,3,"Portfolio Management"),#
+        bsort = [(7,1.5,"Retirement Planning"),(7,3,"Portfolio Management"),#
                  (7,4.5,"Market/Industry Trends"),(7,6,"Stock Picking")]
         self.buttons = []
         for (cx,cy,label) in bsort:
@@ -145,6 +145,11 @@ class VirtualBroker: #name change
         elif key == 'Market/Industry Trends':
             self.win.close()
             newin = MarketIndustryTrends()
+            while True:
+                newin.run()
+        elif key == 'Retirement Planning':
+            self.win.close()
+            newin = retirement()
             while True:
                 newin.run()
             
@@ -1769,6 +1774,508 @@ class RusselTop200(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+###################################################################################################
+class retirement(VirtualBroker):
+    def __init__(self):
+        #creates window for GUI
+        win = GraphWin("Retirement Planning",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createButtons()
+        self.__createDisplay()
+        self.__makeJerry()
+        self.prevScene = self.setScene()
+        
+    def __bgimg(self):
+        bg = Image(Point(5,5), "wood.gif")
+        bg.draw(self.win)
+
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"), (4, 1.5, "51-70 Years Old"), (4,3.5, "31-50 Years Old"), (4, 5.5, "18-30 Years Old")]
+        self.buttons = []
+        for (cx, cy, label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx,cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win, Point(cx,cy), 4, 1, label))
+        for b in self.buttons:
+            b.activate()
+    def __createDisplay(self):
+        head = Rectangle(Point(1, 8), Point(9, 9))
+        head.setFill('white')
+        head.setOutline('gold')
+        head.setWidth(4)
+        head.draw(self.win)
+        title = Text(Point(5, 8.5), "Age Evaluation")
+        title.draw(self.win)
+        title.setSize(28)
+        title.setFace('courier')
+        title.setStyle('bold')
+        ageInput = Rectangle(Point(1, 7.5), Point(6.75, 6.75))
+        ageInput.setFill('white')
+        ageInput.setOutline('gold')
+        ageInput.draw(self.win)
+        ageText = Text(Point(3.8, 7.2), "How old are you?")
+        ageText.draw(self.win)
+        ageText.setSize(18)
+        ageText.setFace('courier')
+        
+    def setScene(self):
+        return VirtualBroker
+    
+    def processButton(self, key):
+        if key == '18-30 Years Old':
+            global age
+            age = 1
+            self.win.close()
+            newin = income()
+            while True:
+                newin.run()
+        elif key == '31-50 Years Old':
+            age = 2
+            self.win.close()
+            newin = income()
+            while True:
+                newin.run()
+        elif key == '51-70 Years Old':
+            age = 3
+            self.win.close()
+            newin = income()
+            while True:
+                newin.run()
+        elif key == 'Back':
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+                
+    def __makeJerry(self):
+        jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
+        jerry.setFill('black')
+        jerry.setOutline('gold')
+        jerry.setWidth(4)
+        jerry.draw(self.win)
+        image = Image(Point(8,4), "myrodin.gif")
+        image.draw(self.win)
+
+class income(VirtualBroker):
+    def __init__(self):
+        #creates window for GUI
+        win = GraphWin("Income Inquiry",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createDisplay()
+        self.__createButtons()
+        self.__makeJerry()
+        self.prevScene = self.setScene()
+        
+    def __bgimg(self):
+        bg = Image(Point(5,5), "wood.gif")
+        bg.draw(self.win)
+        
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"), (4, 1.5, "Greater than $132,000"), (4,3.5, "Between $50,001 and $132,000"), (4, 5.5, "$50,000 or less")]
+        self.buttons = []
+        for (cx, cy, label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx,cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win, Point(cx,cy), 4, 1, label))
+        for b in self.buttons:
+            b.activate()
+            
+    def __createDisplay(self):
+        head = Rectangle(Point(1,8), Point(9,9))
+        head.setFill('white')
+        head.setOutline('gold')
+        head.setWidth(4)
+        head.draw(self.win)
+        title = Text(Point(5, 8.5), "Income Evaluation")
+        title.draw(self.win)
+        title.setSize(28)
+        title.setFace('courier')
+        title.setStyle('bold')
+        incomeInput = Rectangle(Point(1, 7.5), Point(6.75, 6.75))
+        incomeInput.setFill('white')
+        incomeInput.setOutline('gold')
+        incomeInput.draw(self.win)
+        incomeText = Text(Point(3.8, 7.2), "What is your yearly income?")
+        incomeText.draw(self.win)
+        incomeText.setSize(18)
+        incomeText.setFace('courier')
+        
+    def setScene(self):
+        return retirement
+    
+    def processButton(self, key):
+        if key == "Greater than $132,000":
+            global income
+            income = 1
+            self.win.close()
+            newin = employment()
+            while True:
+                newin.run()
+        elif key == "Between $50,001 and $132,000":
+            income = 2
+            self.win.close()
+            newin = employment()
+            while True:
+                newin.run()
+        elif key == "$50,000 or less":
+            income = 3
+            self.win.close()
+            newin = employment()
+            while True:
+                newin.run()
+        elif key == 'Back':
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+                
+    def __makeJerry(self):
+        jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
+        jerry.setFill('black')
+        jerry.setOutline('gold')
+        jerry.setWidth(4)
+        jerry.draw(self.win)
+        image = Image(Point(8,4), "myrodin.gif")
+        image.draw(self.win)
+
+class employment(VirtualBroker):
+    def __init__(self):
+        #creates window for GUI
+        win = GraphWin("Employment Evaluation",700, 500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createDisplay()
+        self.__createButtons()
+        self.__makeJerry()
+        self.prevScene = self.setScene()
+        
+    def __bgimg(self):
+        bg = Image(Point(5,5), "wood.gif")
+        bg.draw(self.win)
+        
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"), (4, 1.5, "Self-Employed"), (4,3.5, "Employed: Employer NO 401K Match"), (4, 5.5, "Employed: Employer 401K Match")]
+        self.buttons = []
+        for (cx, cy, label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx,cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win, Point(cx,cy), 4, 1, label))
+        for b in self.buttons:
+            b.activate()
+            
+    def __createDisplay(self):
+        head = Rectangle(Point(1,8), Point(9,9))
+        head.setFill('white')
+        head.setOutline('gold')
+        head.setWidth(4)
+        head.draw(self.win)
+        title = Text(Point(5, 8.5), "Employment Evaluation")
+        title.draw(self.win)
+        title.setSize(28)
+        title.setFace('courier')
+        title.setStyle('bold')
+        employmentInput = Rectangle(Point(1, 7.5), Point(6.75, 6.75))
+        employmentInput.setFill('white')
+        employmentInput.setOutline('gold')
+        employmentInput.draw(self.win)
+        employmentText = Text(Point(3.8, 7.2), "What is your employment status?")
+        employmentText.draw(self.win)
+        employmentText.setSize(18)
+        employmentText.setFace('courier')
+        
+    def setScene(self):
+        return income
+    
+    def processButton(self, key):
+        if key == "Employed: Employer 401K Match":
+            self.win.close()
+            newin = FourO()
+            while True:
+                newin.run()
+        elif key == "Employed: Employer NO 401K Match":
+            self.win.close()
+            newin = RothIRA()
+            while True:
+                newin.run()
+        elif key == "Self-Employed":
+            self.win.close()
+            newin = IRA()
+            while True:
+                newin.run()
+        elif key == 'Back':
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+                
+    def __makeJerry(self):
+        jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
+        jerry.setFill('black')
+        jerry.setOutline('gold')
+        jerry.setWidth(4)
+        jerry.draw(self.win)
+        image = Image(Point(8,4), "myrodin.gif")
+        image.draw(self.win)
+
+class FourO(VirtualBroker):
+    def __init__(self):
+        #creates window for GUI
+        win = GraphWin("401K",700, 500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createDisplay()
+        self.__createButtons()
+        self.__makeJerry()
+        self.prevScene = self.setScene()
+        
+    def __bgimg(self):
+        bg = Image(Point(5,5), "wood.gif")
+        bg.draw(self.win)
+        
+    def __createButtons(self):
+        bsort = [(1, 1, "Home")]
+        self.buttons = []
+        for (cx, cy, label) in bsort:
+            if label == "Home":
+                self.buttons.append(Button(self.win, Point(cx,cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win, Point(cx,cy), 4, 1, label))
+        for b in self.buttons:
+            b.activate()
+            
+    def __createDisplay(self):
+        head = Rectangle(Point(1,8), Point(9,9))
+        head.setFill('white')
+        head.setOutline('gold')
+        head.setWidth(4)
+        head.draw(self.win)
+        title = Text(Point(5, 8.5), "401(K)")
+        title.draw(self.win)
+        title.setSize(28)
+        title.setFace('courier')
+        title.setStyle('bold')
+        FourOInput = Rectangle(Point(1, 7.5), Point(6.75, 6.75))
+        FourOInput.setFill('white')
+        FourOInput.setOutline('gold')
+        FourOInput.draw(self.win)
+        FourOText = Text(Point(3.8, 7.2), "You should choose a 401(K)!")
+        FourOText.draw(self.win)
+        FourOText.setSize(18)
+        FourOText.setFace('courier')
+        benefit = Rectangle(Point(1, 6), Point(6.75, 2))
+        benefit.setFill('white')
+        benefit.setOutline('gold')
+        benefit.draw(self.win)
+        benefitText = Text(Point(4, 4), """
+-A 401(k) is a retirement savings plan\n
+sponsored by an employer.\n
+-It lets workers save and invest a piece\n
+of their paycheck before taxes are taken out.\n
+-Taxes aren’t paid until the money is withdrawn\n
+from the account.""")
+        benefitText.draw(self.win)
+        benefitText.setSize(14)
+        benefitText.setFace('courier')
+        benefitText.setStyle('bold')
+        
+    def setScene(self):
+        return income
+    
+    def processButton(self, key):
+        if key == "Home":
+            self.win.close()
+            newin = VirtualBroker()
+            while True:
+                newin.run()
+                
+    def __makeJerry(self):
+        jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
+        jerry.setFill('black')
+        jerry.setOutline('gold')
+        jerry.setWidth(4)
+        jerry.draw(self.win)
+        image = Image(Point(8,4), "myrodin.gif")
+        image.draw(self.win)
+        
+class RothIRA(VirtualBroker):
+    def __init__(self):
+        #creates window for GUI
+        win = GraphWin("Roth IRA",700, 500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createDisplay()
+        self.__createButtons()
+        self.__makeJerry()
+        self.prevScene = self.setScene()
+        
+    def __bgimg(self):
+        bg = Image(Point(5,5), "wood.gif")
+        bg.draw(self.win)
+        
+    def __createButtons(self):
+        bsort = [(1, 1, "Home")]
+        self.buttons = []
+        for (cx, cy, label) in bsort:
+            if label == "Home":
+                self.buttons.append(Button(self.win, Point(cx,cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win, Point(cx,cy), 4, 1, label))
+        for b in self.buttons:
+            b.activate()
+            
+    def __createDisplay(self):
+        head = Rectangle(Point(1,8), Point(9,9))
+        head.setFill('white')
+        head.setOutline('gold')
+        head.setWidth(4)
+        head.draw(self.win)
+        title = Text(Point(5, 8.5), "Roth IRA")
+        title.draw(self.win)
+        title.setSize(28)
+        title.setFace('courier')
+        title.setStyle('bold')
+        RothInput = Rectangle(Point(1, 7.5), Point(6.75, 6.75))
+        RothInput.setFill('white')
+        RothInput.setOutline('gold')
+        RothInput.draw(self.win)
+        RothText = Text(Point(3.8, 7.2), "You should choose a Roth IRA!")
+        RothText.draw(self.win)
+        RothText.setSize(18)
+        RothText.setFace('courier')
+        benefit = Rectangle(Point(1, 6), Point(6.75, 2))
+        benefit.setFill('white')
+        benefit.setOutline('gold')
+        benefit.draw(self.win)
+        benefitText = Text(Point(4, 4), """
+-A Roth IRA is a retirement plan under US law\n
+that is generally not taxed.\n
+-The Roth IRA's main difference from retirement\n
+plans is that tax breaks are granted on the money\n
+withdrawn from the plan during retirement.\n
+-Direct contributions to a Roth IRA may be \n
+withdrawn tax and penalty-free at any time.""")
+        benefitText.draw(self.win)
+        benefitText.setSize(14)
+        benefitText.setFace('courier')
+        benefitText.setStyle('bold')
+        
+    def setScene(self):
+        return income
+    
+    def processButton(self, key):
+        if key == "Home":
+            self.win.close()
+            newin = VirtualBroker()
+            while True:
+                newin.run()
+                
+    def __makeJerry(self):
+        jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
+        jerry.setFill('black')
+        jerry.setOutline('gold')
+        jerry.setWidth(4)
+        jerry.draw(self.win)
+        image = Image(Point(8,4), "myrodin.gif")
+        image.draw(self.win)
+        
+class IRA(VirtualBroker):
+    def __init__(self):
+        #creates window for GUI
+        win = GraphWin("Traditional IRA",700, 500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__bgimg()
+        self.__createDisplay()
+        self.__createButtons()
+        self.__makeJerry()
+        self.prevScene = self.setScene()
+        
+    def __bgimg(self):
+        bg = Image(Point(5,5), "wood.gif")
+        bg.draw(self.win)
+        
+    def __createButtons(self):
+        bsort = [(1, 1, "Home")]
+        self.buttons = []
+        for (cx, cy, label) in bsort:
+            if label == "Home":
+                self.buttons.append(Button(self.win, Point(cx,cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win, Point(cx,cy), 4, 1, label))
+        for b in self.buttons:
+            b.activate()
+            
+    def __createDisplay(self):
+        head = Rectangle(Point(1,8), Point(9,9))
+        head.setFill('white')
+        head.setOutline('gold')
+        head.setWidth(4)
+        head.draw(self.win)
+        title = Text(Point(5, 8.5), "Traditional IRA")
+        title.draw(self.win)
+        title.setSize(28)
+        title.setFace('courier')
+        title.setStyle('bold')
+        IRAInput = Rectangle(Point(1, 7.5), Point(6.75, 6.75))
+        IRAInput.setFill('white')
+        IRAInput.setOutline('gold')
+        IRAInput.draw(self.win)
+        IRAText = Text(Point(3.8, 7.2), "You should choose a traditional IRA!")
+        IRAText.draw(self.win)
+        IRAText.setSize(18)
+        IRAText.setFace('courier')
+        benefit = Rectangle(Point(1, 6), Point(6.75, 2))
+        benefit.setFill('white')
+        benefit.setOutline('gold')
+        benefit.draw(self.win)
+        benefitText = Text(Point(4, 4), """
+-A Traditional IRA, or individual retirement \n
+arrangement, is held at banks or brokerages \n
+and can be invested in an assortment of \n
+stocks,mutual funds and indices. \n
+-IRA’s are tax deferred savings plans, meaning\n
+that the money you invest is larger than other\n
+post-tax savings plans.""")
+        benefitText.draw(self.win)
+        benefitText.setSize(14)
+        benefitText.setFace('courier')
+        benefitText.setStyle('bold')
+        
+    def setScene(self):
+        return income
+    
+    def processButton(self, key):
+        if key == "Home":
+            self.win.close()
+            newin = VirtualBroker()
+            while True:
+                newin.run()
+                
+    def __makeJerry(self):
+        jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
+        jerry.setFill('black')
+        jerry.setOutline('gold')
+        jerry.setWidth(4)
+        jerry.draw(self.win)
+        image = Image(Point(8,4), "myrodin.gif")
+        image.draw(self.win)
+
 
 ###################################################################################################
 
