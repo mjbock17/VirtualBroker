@@ -395,7 +395,7 @@ class analyst_opinion(VirtualBroker):
         self.__createButtons()
         self.prevScene = self.setScene()      
     def __createButtons(self):
-        bsort = [(1, 1, "Back"), (4,2.5,"generally negative"),(4,5,"generally positive")]
+        bsort = [(1, 1, "Back"), (4,2.5,"Generally Negative"),(4,5,"Generally Positive")]
         self.buttons = []
         for (cx,cy,label) in bsort:
             if label == "Back":
@@ -430,12 +430,12 @@ class analyst_opinion(VirtualBroker):
     def setScene(self):
         return stockpicking
     def processButton(self, key):
-        if key == 'generally positive':#
+        if key == 'Generally Positive':#
             self.win.close()#
             newin = buy()
             while True:
                 newin.run()
-        elif key == 'generally negative':#
+        elif key == 'Generally Negative':#
             self.win.close()#
             newin = dontbuy()#
             while True:
@@ -551,7 +551,7 @@ class divyield(VirtualBroker):
         questionbox = Rectangle(Point(.2,7.5),Point(6.9,6))
         questionbox.setFill('white')
         questionbox.draw(self.win)
-        question = Text(Point(3.65,6.8),"Please enter this company's dividend \nyield ratio(round to nearest hundredth) \nthen press enter")
+        question = Text(Point(3.65,6.8),"Please enter this company's dividend \nyield ratio(if N/A enter 0) \nthen press enter")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
@@ -654,11 +654,11 @@ class dontbuy(VirtualBroker):
         questionbox = Rectangle(Point(1,7.5),Point(6.75,6.2))
         questionbox.setFill('white')
         questionbox.draw(self.win)
-        question = Text(Point(3.8,7.1),"to NOT buy this stock,")
+        question = Text(Point(3.8,7.1),"to NOT buy this stock, for")
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
-        question1 = Text(Point(3.8,6.5),"for these reasons:")
+        question1 = Text(Point(3.8,6.5),"one or more of these reasons:")
         question1.draw(self.win)
         question1.setSize(15)
         question1.setFace('courier')
@@ -694,7 +694,7 @@ class buy(VirtualBroker):
         self.__createstockDisplay()
         self.__createButtons()     
     def __createButtons(self):
-        bsort = [(2,1,"Return to home page"),(3.8,4.5,"Projected Earnings")]
+        bsort = [(2,1,"Return to home page"),(3.8,4.5,"Projected Earnings"),(3.8,3,"Archive This Stockpick")]
         self.buttons = []
         for (cx,cy,label) in bsort:
             self.buttons.append(Button(self.win,Point(cx,cy),2.4,1,label))
@@ -731,6 +731,11 @@ class buy(VirtualBroker):
         if key == 'Projected Earnings':
             self.win.close()
             newin = projearn()
+            while True:
+                newin.run()
+        elif key == 'Archive This Stockpick':
+            self.win.close()
+            newin = filecreator()
             while True:
                 newin.run()
         elif key == 'Return to home page':#
@@ -853,6 +858,142 @@ class projearn(VirtualBroker):
         except:
             error = Text(Point(4.5,2.5),"ERROR. Please enter a numeric value")
             error.draw(self.win)
+
+class filecreator(VirtualBroker):
+    def __init__(self):
+        win = GraphWin("Stock Picking(11)",700,500)
+        win.setCoords(0,0,10,10)
+        win.setBackground("slategray")
+        self.win = win
+        self.__createstockDisplay()
+        self.__createButtons()
+        self.prevScene = self.setScene()
+        self.__createinputDisplay()
+
+
+    def __createButtons(self):
+        bsort = [(1, 1, "Back"),(2.8,3.2,"Click to Enter Name"),(2.8,4.5,"Click to Enter 'ticker'")]
+        self.buttons = []
+        for (cx,cy,label) in bsort:
+            if label == "Back":
+                self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
+            else:
+                self.buttons.append(Button(self.win,Point(cx,cy),2.2,1,label))
+        for b in self.buttons:
+            b.activate()
+    def __createstockDisplay(self):
+        head = Rectangle(Point(.2,8),Point(9,9))
+        head.setFill('white')
+        head.draw(self.win)
+        title = Text(Point(4.6,8.5), "Archive This Stockpick")
+        title.draw(self.win)
+        title.setSize(30)
+        title.setFace("courier")
+        title.setStyle("bold")
+        c = Rectangle(Point(7,2.5),Point(9,7.5))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(8,5),"myrodin.gif")
+        image.draw(self.win)
+        questionbox = Rectangle(Point(.2,7.5),Point(6.9,6))
+        questionbox.setFill('white')
+        questionbox.draw(self.win)
+        question = Text(Point(3.65,6.8),"Please enter the company name\nand the stocks 'ticker'")
+        question.draw(self.win)
+        question.setSize(15)
+        question.setFace('courier')
+
+    def __createinputDisplay(self):
+        box1 = Rectangle(Point(4,4), Point(6,5)) ###textbox
+        box1.setFill("white")
+        box1.draw(self.win)
+        textbox3 = Text(Point(5,4.5), "")
+        textbox3.setSize(10)
+        textbox3.draw(self.win)
+        textbox4 = Text(Point(5,4.5), "") ###Creates a blank textbox
+        textbox4.draw(self.win)
+        self.textB = textbox4 ###creates a textbox variable
+
+        box2 = Rectangle(Point(4,2.7), Point(6,3.7)) ###textbox
+        box2.setFill("white")
+        box2.draw(self.win)
+        textbox2 = Text(Point(5,3.2), "")
+        textbox2.setSize(10)
+        textbox2.draw(self.win)
+        textbox = Text(Point(5,3.2), "") ###Creates a blank textbox
+        textbox.draw(self.win)
+        self.textA = textbox ###creates a textbox variable
+
+
+    def inputBar(self):
+        self.textB.setText("")
+        index = "" ###Blank Message
+        while True:
+            p = self.win.getKey() ###Gets key pressed
+            if p == "Return":
+                return index
+            if p == "BackSpace":
+                index = index[0:len(index) -1] ###Removes last item
+                self.textB.setText(" " + index)
+                continue
+            if p == "space": #adds a space when the space bar is hit!
+                index = index + " " 
+                continue
+            if p == "period":
+                index = index + "."
+                self.textB.setText(" " + index)
+                continue
+            index = index + str(p) ###Adds String
+            self.textB.setText(" " + index)
+
+    def inputBar1(self):
+        self.textA.setText("")
+        index = "" ###Blank Message
+        while True:
+            p = self.win.getKey() ###Gets key pressed
+            if p == "Return":
+                return index
+            if p == "BackSpace":
+                index = index[0:len(index) -1] ###Removes last item
+                self.textA.setText(" " + index)
+                continue
+            if p == "space": #adds a space when the space bar is hit!
+                index = index + " " 
+                continue
+            if p == "period":
+                index = index + "."
+                self.textA.setText(" " + index)
+                continue
+            index = index + str(p) ###Adds String
+            self.textA.setText(" " + index)
+            
+    def setScene(self):
+        return stockpicking
+        
+    def processButton(self, key):
+        try:
+            if key == "Back":
+                self.win.close()
+                newin = self.prevScene()
+                while True:
+                    newin.run()
+            elif key == "Click to Enter Name":
+                blink = Rectangle(Point(5.8,3.8),Point(5.9,3.9)) #notifies the user to type
+                blink.setFill('red')
+                blink.draw(self.win)
+                information = self.inputBar1()
+                
+            elif key == "Click to Enter 'ticker'":
+                blink1 = Rectangle(Point(5.8,5.1),Point(5.9,5.2))
+                blink1.setFill('red')
+                blink1.draw(self.win)
+                information1 = self.inputBar()
+        except:
+            error = Text(Point(4.5,2.5),"ERROR")
+            error.draw(self.win)
+
 
 #########################################################################################
 #Henrik's Section
