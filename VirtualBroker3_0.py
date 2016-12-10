@@ -974,7 +974,7 @@ class filecreator(VirtualBroker, Welcome):
 
     def fileadd(self, name, ticker):
         fileappend = open(FileName, 'a')
-        fileappend.write(str(name) + " " + str(ticker) + " ")
+        fileappend.write(str(name) + " " + str(ticker) + '\t')
         fileappend.close()
         stored = Text(Point(5, 2), "Your file has been stored. \n Please click 'Back' to return to the main menu")
         stored.setSize(10)
@@ -986,7 +986,7 @@ class filecreator(VirtualBroker, Welcome):
 
 class pmgmt(VirtualBroker, Welcome):
     def __init__(self):
-        win = GraphWin("Portfolio Management", 700, 500)
+        win = GraphWin("Portfolio Management", 700, 500)  #
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
@@ -1157,11 +1157,17 @@ class highrisk(VirtualBroker):
 
     def processButton(self, key):
         if key == 'Long Term':
+            fileappend = open(FileName, 'a')
+            fileappend.write("Stocks: 70%, Bonds: 25%, Cash: 5%, expected return 6 years 20% +/- 10%")
+            fileappend.close()
             self.win.close()
             newin = hrlt()
             while True:
                 newin.run()
         if key == 'Short Term':
+            fileappend = open(FileName, 'a')
+            fileappend.write("Stocks: 80%, Bonds: 15%, Cash: 5%, expected return 3 years 24% +/- 19%")
+            fileappend.close()
             self.win.close()
             newin = hrst()
             while True:
@@ -1249,13 +1255,17 @@ class lowrisk(VirtualBroker):
 
     def processButton(self, key):
         if key == 'Long Term':
+            fileappend = open(FileName, 'a')
+            fileappend.write("Stocks: 40%, Bonds: 50%, Cash: 10%, expected return 12 years 8% +/- 2%")
+            fileappend.close()
             self.win.close()
             newin = lrlt()
-            file = open(FileName, 'a')
-            file.write('')
             while True:
                 newin.run()
         if key == 'Short Term':
+            fileappend = open(FileName, 'a')
+            fileappend.write("Stocks: 50%, Bonds: 40%, Cash: 10%, expected return 3 years 4% +/- 1%")
+            fileappend.close()
             self.win.close()
             newin = lrst()
             while True:
@@ -1585,6 +1595,8 @@ class lrst(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+
+
 
 ###################################################################################################
 class MarketIndustryTrends(VirtualBroker):
@@ -2394,8 +2406,8 @@ post-tax savings plans.""")
 ###################################################################################################
 
 
-Welcome()
+Welcome()  # calls start
 
 if __name__ == '__main__':
-    virtualbroker = VirtualBroker()
-    virtualbroker.run()
+    theCalc1 = VirtualBroker()
+    theCalc1.run()
