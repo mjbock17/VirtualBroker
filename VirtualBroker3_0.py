@@ -524,7 +524,7 @@ class strongreason(VirtualBroker):
                 newin.run()
 
 
-class divyield(VirtualBroker):
+class divyield(VirtualBroker, Welcome):
     def __init__(self):
         win = GraphWin("Stock Picking(6)", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -581,27 +581,6 @@ class divyield(VirtualBroker):
         textbox = Text(Point(5, 3.5), "")  # Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
-
-    def inputBar(self):
-        self.textB.setText("")
-        index = ""  # Blank Message
-        while True:
-            p = self.win.getKey()  # Gets key pressed
-            if p == "Return":
-                return index
-            if p == "BackSpace":
-                index = index[0:len(index) - 1]  # Removes last item
-                self.textB.setText(" " + index)
-                continue
-            if p == "space":  # adds a space when the space bar is hit!
-                index += " "
-                continue
-            if p == "period":
-                index += "."
-                self.textB.setText(" " + index)
-                continue
-            index += str(p)  # Adds String
-            self.textB.setText(" " + index)
 
     def setScene(self):
         return stockpicking
@@ -767,7 +746,7 @@ class buy(VirtualBroker):
                 newin.run()
 
 
-class projearn(VirtualBroker):
+class projearn(VirtualBroker, Welcome):
     def __init__(self):
         win = GraphWin("Stock Picking(10)", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -823,27 +802,6 @@ class projearn(VirtualBroker):
         textbox = Text(Point(5.7, 5.3), "")  # Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
-
-    def inputBar(self):
-        self.textB.setText("")
-        index = ""  # Blank Message
-        while True:
-            p = self.win.getKey()  # Gets key pressed
-            if p == "Return":
-                return index
-            if p == "BackSpace":
-                index = index[0:len(index) - 1]  # Removes last item
-                self.textB.setText(" " + index)
-                continue
-            if p == "space":  # adds a space when the space bar is hit!
-                index += " "
-                continue
-            if p == "period":
-                index += "."
-                self.textB.setText(" " + index)
-                continue
-            index += str(p)  # Adds String
-            self.textB.setText(" " + index)
 
     def setScene(self):
         return buy
@@ -1016,7 +974,7 @@ class filecreator(VirtualBroker, Welcome):
 
     def fileadd(self, name, ticker):
         fileappend = open(FileName, 'a')
-        fileappend.write(str(name) + " " + str(ticker) + '\t')
+        fileappend.write(str(name) + " " + str(ticker) + " ")
         fileappend.close()
         stored = Text(Point(5, 2), "Your file has been stored. \n Please click 'Back' to return to the main menu")
         stored.setSize(10)
@@ -1026,9 +984,9 @@ class filecreator(VirtualBroker, Welcome):
 #########################################################################################
 # Henrik's Section
 
-class pmgmt(VirtualBroker):
+class pmgmt(VirtualBroker, Welcome):
     def __init__(self):
-        win = GraphWin("Portfolio Management", 700, 500)  #
+        win = GraphWin("Portfolio Management", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
@@ -1088,23 +1046,6 @@ class pmgmt(VirtualBroker):
         title.draw(self.win)
         title.setSize(15)  #
         title.setStyle("bold")
-
-    def inputBar(self):
-        self.textB.setText("")
-        index = ""  # Blank Message
-        while True:
-            p = self.win.getKey()  # Gets key pressed
-            if p == "Return":
-                return index
-            if p == "BackSpace":
-                index = index[0:len(index) - 1]  # Removes last item
-                self.textB.setText(" " + index)
-                continue
-            if p == "space":  # adds a space when the space bar is hit!
-                index += " "
-                continue
-            index += str(p)  # Adds String
-            self.textB.setText(" " + index)
 
     def setScene(self):
         return VirtualBroker
@@ -1310,6 +1251,8 @@ class lowrisk(VirtualBroker):
         if key == 'Long Term':
             self.win.close()
             newin = lrlt()
+            file = open(FileName, 'a')
+            file.write('')
             while True:
                 newin.run()
         if key == 'Short Term':
@@ -1642,7 +1585,6 @@ class lrst(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
-
 
 ###################################################################################################
 class MarketIndustryTrends(VirtualBroker):
@@ -2452,8 +2394,8 @@ post-tax savings plans.""")
 ###################################################################################################
 
 
-Welcome()  # calls start
+Welcome()
 
 if __name__ == '__main__':
-    theCalc1 = VirtualBroker()
-    theCalc1.run()
+    virtualbroker = VirtualBroker()
+    virtualbroker.run()
