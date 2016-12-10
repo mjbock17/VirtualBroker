@@ -8,28 +8,49 @@ class Welcome:
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
+        self.__bgimg()
+        self.__makeJerry()
         self.__createDisplay()
         self.__createFile()
         self.win.close()
 
+    def __bgimg(self):
+        #sets background
+        bg = Image(Point(5, 5), "gradient.gif")
+        bg.draw(self.win)
+
+    def __makeJerry(self): #imports jerry image, provides text
+        c = Rectangle(Point(4.1, 2), Point(5.9, 6.6))
+        c.setFill('black')
+        c.setOutline('gold')
+        c.setWidth(4)
+        c.draw(self.win)
+        image = Image(Point(5, 4.3), "myrodin.gif")
+        image.draw(self.win)
+        hello = Text(Point(7.8,5.5),"Hello my name is Jerry!")
+        hello.setTextColor("white")
+        hello.setStyle("bold")
+        hello.setSize(16)
+        hello.draw(self.win)
+        
     def __createDisplay(self):
         # Creates title box
-        textbox1 = Rectangle(Point(2.5, 8), Point(7.5, 10))
+        textbox1 = Rectangle(Point(2.5, 7), Point(7.5, 9))
         textbox1.draw(self.win)
         textbox1.setFill("white")
 
         # Creates text for welcome
-        welcometext = Text(Point(5, 9), "Welcome! \n Please enter your name.")
+        welcometext = Text(Point(5, 8), "Welcome! \n Please enter your name.")
         welcometext.setSize(20)
         welcometext.draw(self.win)
 
         # Creates Textbox
-        textbox2 = Rectangle(Point(3, 1.4), Point(7, 2.6))
+        textbox2 = Rectangle(Point(3, .5), Point(7, 1.5))
         textbox2.setFill("white")
         textbox2.draw(self.win)
 
         # Creates text for input bar
-        text1 = Text(Point(5, 2), "")
+        text1 = Text(Point(5, 1), "")
         text1.draw(self.win)
         self.textB = text1
 
@@ -116,7 +137,7 @@ class VirtualBroker:  # name change
         c.draw(self.win)
         image = Image(Point(2, 4), "myrodin.gif")
         image.draw(self.win)
-        text2 = Text(Point(2, 1.5), "Hello, my name is Jerry!")
+        text2 = Text(Point(2, 1.5), "Secure Your Future.")
         text2.setTextColor('white')
         text2.setSize(10)
         text2.setFace("courier")
@@ -986,16 +1007,16 @@ class filecreator(VirtualBroker, Welcome):
 
 class pmgmt(VirtualBroker, Welcome):
     def __init__(self):
-        win = GraphWin("Portfolio Management", 700, 500)  #
+        win = GraphWin("Portfolio Management", 700, 500)  
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
-        self.__bgimg()
-        self.__createstockDisplay()
+        self.__bgimg() #objects in the constructor are called and activated before the user clicks
+        self.__createstockDisplay() 
         self.__createinputDisplay()
         self.__createButtons()
         self.__makeJerry()
-        self.prevScene = self.setScene()
+        self.prevScene = self.setScene() #sets up variable for back button
 
     def __createinputDisplay(self):
         box1 = Rectangle(Point(3, 1), Point(9, 2))  # textbox
@@ -1008,7 +1029,7 @@ class pmgmt(VirtualBroker, Welcome):
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
 
-    def __bgimg(self):
+    def __bgimg(self): #sets the gradient background
         bg = Image(Point(5, 5), "gradient.gif")
         bg.draw(self.win)
 
@@ -1016,14 +1037,14 @@ class pmgmt(VirtualBroker, Welcome):
         aSpecs = [(1, 1, "Back"), (2.2, 3.1, "enter text")]
         self.buttons = []
         for (cx, cy, label) in aSpecs:
-            if label == "Back":
+            if label == "Back": #creates back button
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
                 self.buttons.append(Button(self.win, Point(cx, cy), 2, 1, label))
         for b in self.buttons:
-            b.activate()
+            b.activate() #activate the buttons
 
-    def __makeJerry(self):
+    def __makeJerry(self): #creates jerry image and text
         c = Rectangle(Point(4, 2.5), Point(6, 7.5))
         c.setFill('black')
         c.setOutline('gold')
@@ -1038,7 +1059,7 @@ class pmgmt(VirtualBroker, Welcome):
         text2.setStyle("bold")
         text2.draw(self.win)
 
-    def __createstockDisplay(self):
+    def __createstockDisplay(self): #creates display at the top of the window
         head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -1047,7 +1068,7 @@ class pmgmt(VirtualBroker, Welcome):
         title.setSize(15)  #
         title.setStyle("bold")
 
-    def setScene(self):
+    def setScene(self): #determines the screeen the backbutton will affect
         return VirtualBroker
 
     def processButton(self, key):
@@ -1057,12 +1078,12 @@ class pmgmt(VirtualBroker, Welcome):
                 blink = Rectangle(Point(2.5, 2.1), Point(2.6, 2.2))  # notifies the user to type
                 blink.setFill('red')
                 blink.draw(self.win)
-                information = self.inputBar()
+                information = self.inputBar() #saves the info for the if conditional
                 newinfo = int(information)
                 blink.undraw()
                 if 50 <= newinfo:
                     self.win.close()
-                    newin = highrisk()
+                    newin = highrisk() #opens the next window
                     while True:
                         newin.run()
                 elif newinfo < 50:
@@ -1072,18 +1093,18 @@ class pmgmt(VirtualBroker, Welcome):
                         newin.run()
             elif key == "Back":
                 self.win.close()
-                newin = self.prevScene()
+                newin = self.prevScene() #looks for the variable that the back button should go to
                 while True:
                     newin.run()
         except:
-            error = Text(Point(6, .6), "ERROR. Please enter a numeric value")
+            error = Text(Point(6, .6), "ERROR. Please enter a numeric value") #activates if non str
             error.draw(self.win)
             error.setTextColor('white')
 
 
 class highrisk(VirtualBroker):
     def __init__(self):
-        win = GraphWin("High Risk", 700, 500)  #
+        win = GraphWin("High Risk", 700, 500)  
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
@@ -1098,7 +1119,7 @@ class highrisk(VirtualBroker):
         bg = Image(Point(5, 5), "gradient.gif")
         bg.draw(self.win)
 
-    def __minidsplay(self):
+    def __minidsplay(self): #creates small display far right side of screen
         head = Rectangle(Point(9, 1), Point(9.5, 7))
         head.setFill('white')
         head.draw(self.win)
@@ -1120,12 +1141,12 @@ class highrisk(VirtualBroker):
         head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5, 8.5), "High Risk Portfolio")  #
+        title = Text(Point(5, 8.5), "High Risk Portfolio")  
         title.draw(self.win)
-        title.setSize(15)  #
+        title.setSize(15)  
         title.setStyle("bold")
 
-    def __graph(self):
+    def __graph(self): #imports the graphic for the window
         a = Rectangle(Point(5.25, 2.7), Point(9.725, 7.25))
         a.setFill("Light Steel Blue")
         a.setOutline("gold")
@@ -1153,11 +1174,11 @@ class highrisk(VirtualBroker):
         text3.draw(self.win)
 
     def setScene(self):
-        return pmgmt
+        return pmgmt #the back button will now return pmgmt
 
     def processButton(self, key):
         if key == 'Long Term':
-            fileappend = open(FileName, 'a')
+            fileappend = open(FileName, 'a') #opens the user save file and appends the portfolio stats
             fileappend.write("Stocks: 70%, Bonds: 25%, Cash: 5%, expected return 6 years 20% +/- 10%")
             fileappend.close()
             self.win.close()
@@ -1165,7 +1186,7 @@ class highrisk(VirtualBroker):
             while True:
                 newin.run()
         if key == 'Short Term':
-            fileappend = open(FileName, 'a')
+            fileappend = open(FileName, 'a') #user save file
             fileappend.write("Stocks: 80%, Bonds: 15%, Cash: 5%, expected return 3 years 24% +/- 19%")
             fileappend.close()
             self.win.close()
@@ -1218,9 +1239,9 @@ class lowrisk(VirtualBroker):
         head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5, 8.5), "Low Risk Portfolio")  #
+        title = Text(Point(5, 8.5), "Low Risk Portfolio")  
         title.draw(self.win)
-        title.setSize(15)  #
+        title.setSize(15)  
         title.setStyle("bold")
 
     def __graph(self):
@@ -1255,7 +1276,7 @@ class lowrisk(VirtualBroker):
 
     def processButton(self, key):
         if key == 'Long Term':
-            fileappend = open(FileName, 'a')
+            fileappend = open(FileName, 'a') #user save file
             fileappend.write("Stocks: 40%, Bonds: 50%, Cash: 10%, expected return 12 years 8% +/- 2%")
             fileappend.close()
             self.win.close()
@@ -1263,7 +1284,7 @@ class lowrisk(VirtualBroker):
             while True:
                 newin.run()
         if key == 'Short Term':
-            fileappend = open(FileName, 'a')
+            fileappend = open(FileName, 'a') #user save file
             fileappend.write("Stocks: 50%, Bonds: 40%, Cash: 10%, expected return 3 years 4% +/- 1%")
             fileappend.close()
             self.win.close()
@@ -1277,7 +1298,7 @@ class lowrisk(VirtualBroker):
                 newin.run()
 
 
-class hrlt(VirtualBroker):
+class hrlt(VirtualBroker): #final user screen
     def __init__(self):
         win = GraphWin("hrlt", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -1300,7 +1321,7 @@ class hrlt(VirtualBroker):
         head.draw(self.win)
 
     def __createButtons(self):
-        aSpecs = [(1, 1, "Home")]
+        aSpecs = [(1, 1, "Home")] #back button now called home, return pmgmt
 
         self.buttons = []
         for (cx, cy, label) in aSpecs:
@@ -1315,9 +1336,9 @@ class hrlt(VirtualBroker):
         head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5, 8.5), "High Risk Long Term")  #
+        title = Text(Point(5, 8.5), "High Risk Long Term")  
         title.draw(self.win)
-        title.setSize(15)  #
+        title.setSize(15)  
         title.setStyle("bold")
 
     def __graph(self):
@@ -1350,14 +1371,14 @@ class hrlt(VirtualBroker):
         return VirtualBroker
 
     def processButton(self, key):
-        if key == "Home":
+        if key == "Home": #back button now called home, return pmgmt
             self.win.close()
             newin = self.prevScene()
             while True:
                 newin.run()
 
 
-class hrst(VirtualBroker):
+class hrst(VirtualBroker): #final user screen
     def __init__(self):
         win = GraphWin("hrst", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -1380,11 +1401,11 @@ class hrst(VirtualBroker):
         head.draw(self.win)
 
     def __createButtons(self):
-        aSpecs = [(1, 1, "Home")]
+        aSpecs = [(1, 1, "Home")] #back button now called home, return pmgmt
 
         self.buttons = []
         for (cx, cy, label) in aSpecs:
-            if label == "Home":
+            if label == "Home": #back button now called home
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
                 self.buttons.append(Button(self.win, Point(cx, cy), 2, 1, label))
@@ -1395,9 +1416,9 @@ class hrst(VirtualBroker):
         head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5, 8.5), "High Risk Short Term")  #
+        title = Text(Point(5, 8.5), "High Risk Short Term")  
         title.draw(self.win)
-        title.setSize(15)  #
+        title.setSize(15)  
         title.setStyle("bold")
 
     def __graph(self):
@@ -1437,7 +1458,7 @@ class hrst(VirtualBroker):
                 newin.run()
 
 
-class lrlt(VirtualBroker):
+class lrlt(VirtualBroker): #final user screen
     def __init__(self):
         win = GraphWin("lrlt", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -1464,7 +1485,7 @@ class lrlt(VirtualBroker):
 
         self.buttons = []
         for (cx, cy, label) in aSpecs:
-            if label == "Home":
+            if label == "Home": #back button now called home, return pmgmt
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
                 self.buttons.append(Button(self.win, Point(cx, cy), 2, 1, label))
@@ -1475,9 +1496,9 @@ class lrlt(VirtualBroker):
         head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5, 8.5), "Low Risk Long Term")  #
+        title = Text(Point(5, 8.5), "Low Risk Long Term")  
         title.draw(self.win)
-        title.setSize(15)  #
+        title.setSize(15)  
         title.setStyle("bold")
 
     def __graph(self):
@@ -1510,14 +1531,14 @@ class lrlt(VirtualBroker):
         return VirtualBroker
 
     def processButton(self, key):
-        if key == "Home":
+        if key == "Home": #back button now called home, return pmgmt
             self.win.close()
             newin = self.prevScene()
             while True:
                 newin.run()
 
 
-class lrst(VirtualBroker):
+class lrst(VirtualBroker): #final user screen
     def __init__(self):
         win = GraphWin("lrst", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -1540,7 +1561,7 @@ class lrst(VirtualBroker):
         head.draw(self.win)
 
     def __createButtons(self):
-        aSpecs = [(1, 1, "Home")]
+        aSpecs = [(1, 1, "Home")] #back button now called home, return pmgmt
 
         self.buttons = []
         for (cx, cy, label) in aSpecs:
@@ -1555,9 +1576,9 @@ class lrst(VirtualBroker):
         head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5, 8.5), "Low Risk Short Term")  #
+        title = Text(Point(5, 8.5), "Low Risk Short Term")  
         title.draw(self.win)
-        title.setSize(15)  #
+        title.setSize(15)  
         title.setStyle("bold")
 
     def __graph(self):
@@ -1590,7 +1611,7 @@ class lrst(VirtualBroker):
         return VirtualBroker
 
     def processButton(self, key):
-        if key == "Home":
+        if key == "Home": #back button now called home, return pmgmt
             self.win.close()
             newin = self.prevScene()
             while True:
