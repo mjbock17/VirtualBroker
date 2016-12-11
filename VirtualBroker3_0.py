@@ -2386,7 +2386,7 @@ withdrawn from the plan during retirement.\n
 -Direct contributions to a Roth IRA may be \n
 withdrawn tax and penalty-free at any time.""")
         benefitText.draw(self.win)
-        benefitText.setSize(14)
+        benefitText.setSize(12)
         benefitText.setFace('courier')
         benefitText.setStyle('bold')
 
