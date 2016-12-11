@@ -2303,7 +2303,7 @@ of their paycheck before taxes are taken out.\n
 -Taxes aren’t paid until the money is withdrawn\n
 from the account.""")
         benefitText.draw(self.win)
-        benefitText.setSize(14)
+        benefitText.setSize(8)
         benefitText.setFace('courier')
         benefitText.setStyle('bold')
 
@@ -2371,7 +2371,7 @@ class RothIRA(VirtualBroker):
         RothInput.draw(self.win)
         RothText = Text(Point(3.8, 7.2), "You should choose a Roth IRA!")
         RothText.draw(self.win)
-        RothText.setSize(18)
+        RothText.setSize(16)
         RothText.setFace('courier')
         benefit = Rectangle(Point(1, 6), Point(6.75, 2))
         benefit.setFill('white')
@@ -2386,7 +2386,7 @@ withdrawn from the plan during retirement.\n
 -Direct contributions to a Roth IRA may be \n
 withdrawn tax and penalty-free at any time.""")
         benefitText.draw(self.win)
-        benefitText.setSize(12)
+        benefitText.setSize(8)
         benefitText.setFace('courier')
         benefitText.setStyle('bold')
 
@@ -2452,9 +2452,9 @@ class IRA(VirtualBroker):
         IRAInput.setFill('white')
         IRAInput.setOutline('gold')
         IRAInput.draw(self.win)
-        IRAText = Text(Point(3.8, 7.2), "You should choose a traditional IRA!")
+        IRAText = Text(Point(3.9, 7.2), "You should choose a traditional IRA!")
         IRAText.draw(self.win)
-        IRAText.setSize(18)
+        IRAText.setSize(14)
         IRAText.setFace('courier')
         benefit = Rectangle(Point(1, 6), Point(6.75, 2))
         benefit.setFill('white')
@@ -2469,7 +2469,7 @@ stocks,mutual funds and indices. \n
 that the money you invest is larger than other\n
 post-tax savings plans.""")
         benefitText.draw(self.win)
-        benefitText.setSize(14)
+        benefitText.setSize(8)
         benefitText.setFace('courier')
         benefitText.setStyle('bold')
 
