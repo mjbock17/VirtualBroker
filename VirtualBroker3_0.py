@@ -675,20 +675,20 @@ class divyield(VirtualBroker, Welcome):
         return stockpicking
 
     def processButton(self, key):
-        # try:
-            if key == "Back":
-                self.win.close()
-                newin = self.prevScene()
-                while True:
-                    newin.run()
-            elif key == "Click to Enter":
-                blink = Rectangle(Point(4.1, 4.1), Point(4.2, 4.2))  # notifies the user to type
-                blink.setFill('red')
-                blink.draw(self.win)
-                information = self.inputBar()
-                divyield = float(information)
-                blink.undraw()
-                if divyield > 1.5:
+        if key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+        elif key == "Click to Enter":
+            blink = Rectangle(Point(4.1, 4.1), Point(4.2, 4.2))  # notifies the user to type
+            blink.setFill('red')
+            blink.draw(self.win)
+            information = self.inputBar()
+            blink.undraw()
+            try:
+                divyield1 = float(information)
+                if divyield1 > 1.5:
                     self.win.close()
                     newin = buy()
                     while True:
@@ -698,9 +698,12 @@ class divyield(VirtualBroker, Welcome):
                     newin = dontbuy()
                     while True:
                         newin.run()
-        # except:
-            error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
-            error.draw(self.win)
+            except:
+                error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value") ###Creates incase of Error
+                try:
+                    error.draw(self.win)
+                except:
+                    sys.exit()
 
 
 class dontbuy(VirtualBroker):
@@ -896,19 +899,19 @@ class projearn(VirtualBroker, Welcome):
         return buy
 
     def processButton(self, key):
-        # try:
-            if key == "Back":
-                self.win.close()
-                newin = self.prevScene()
-                while True:
-                    newin.run()
-            elif key == "Click to Enter":
-                blink = Rectangle(Point(2.3, 5.8), Point(2.2, 5.9))  # notifies the user to type
-                blink.setFill('red')
-                blink.draw(self.win)
-                information = self.inputBar()
+        if key == "Back":
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+        elif key == "Click to Enter":
+            blink = Rectangle(Point(2.3, 5.8), Point(2.2, 5.9))  # notifies the user to type
+            blink.setFill('red')
+            blink.draw(self.win)
+            information = self.inputBar()
+            blink.undraw()
+            try:
                 price = float(information)
-                blink.undraw()
                 fiveper = price * 1.05 - price
                 nfiveper = "%.2f" % fiveper
                 tenper = price * 1.1 - price
@@ -925,9 +928,12 @@ class projearn(VirtualBroker, Welcome):
                 fifteen.draw(self.win)
                 twenty = Text(Point(4, 1), "-Earnings of twenty percent: $" + ntwentyper)
                 twenty.draw(self.win)
-        # except:
-            error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
-            error.draw(self.win)
+            except:
+                error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
+                try:
+                    error.draw(self.win)
+                except:
+                    sys.exit()
 
 
 class filecreator(VirtualBroker, Welcome):
@@ -999,6 +1005,12 @@ class filecreator(VirtualBroker, Welcome):
         textbox.draw(self.win)
         self.textA = textbox  # creates a textbox variable
 
+    def __storeName(self, name):
+        self.Name = name
+
+    def __storeTicker(self, ticker):
+        self.Ticker = ticker
+
     def inputBar1(self):
         self.textA.setText("")
         index = ""  # Blank Message
@@ -1023,55 +1035,53 @@ class filecreator(VirtualBroker, Welcome):
             index += str(p)  # Adds String
             self.textA.setText(" " + index)
 
-    def __storeName(self, name):
-        self.Name = name
-
-    def __storeTicker(self, ticker):
-        self.Ticker = ticker
-
     def setScene(self):
         return stockpicking
 
     def processButton(self, key):
         #  checks for info stored. No repeat Archive Button.
-        # try:
-            if key == "Back" and self.storedinfo == 0:
-                self.win.close()
-                newin = self.prevScene()
-                while True:
-                    newin.run()
-            elif key == "Back" and self.storedinfo == 1:
-                self.win.close()
-                newin = VirtualBroker()
-                while True:
-                    newin.run()
-            elif key == "Click to Enter 'ticker'":
-                blink = Rectangle(Point(5.8, 3.8), Point(5.9, 3.9))  # notifies the user to type
-                blink.setFill('red')
-                blink.draw(self.win)
-                ticker = self.inputBar1()
-                self.__storeTicker(ticker)
-            elif key == "Click to Enter Name":
-                blink1 = Rectangle(Point(5.8, 5.1), Point(5.9, 5.2))
-                blink1.setFill('red')
-                blink1.draw(self.win)
-                name = self.inputBar()
-                self.__storeName(name)
-            elif key == "Archive" and self.storedinfo == 0:
+        if key == "Back" and self.storedinfo == 0:
+            self.win.close()
+            newin = self.prevScene()
+            while True:
+                newin.run()
+        elif key == "Back" and self.storedinfo == 1:
+            self.win.close()
+            newin = VirtualBroker()
+            while True:
+                newin.run()
+        elif key == "Click to Enter 'ticker'":
+            blink = Rectangle(Point(5.8, 3.8), Point(5.9, 3.9))  # notifies the user to type
+            blink.setFill('red')
+            blink.draw(self.win)
+            ticker = self.inputBar1()
+            blink.undraw()
+            self.__storeTicker(ticker)
+        elif key == "Click to Enter Name":
+            blink1 = Rectangle(Point(5.8, 5.1), Point(5.9, 5.2))
+            blink1.setFill('red')
+            blink1.draw(self.win)
+            name = self.inputBar()
+            blink1.undraw()
+            self.__storeName(name)
+        elif key == "Archive" and self.storedinfo == 0:
+            try:
                 self.fileadd(self.Name, self.Ticker)
                 self.storedinfo = +1
-        # except:
-            error = Text(Point(4.5, 2.5), "ERROR")
-            error.draw(self.win)
+            except:
+                error = Text(Point(4.5, 2.5), "ERROR")
+                try:
+                    error.draw(self.win)
+                except:
+                    sys.exit()
 
     def fileadd(self, name, ticker):
         fileappend = open(FileName, 'a')
-        fileappend.write("Stock: " + str(name) + " " + "$" + str(ticker) + '\t')
+        fileappend.write("Stock: " + str(name) + " " + str(ticker) + '\t')
         fileappend.close()
         stored = Text(Point(5, 2), "Your file has been stored. \n Please click 'Back' to return to the main menu")
         stored.setSize(10)
         stored.draw(self.win)
-
 
 #########################################################################################
 # Henrik's Section
@@ -1143,15 +1153,15 @@ class pmgmt(VirtualBroker, Welcome):
         return VirtualBroker
 
     def processButton(self, key):
-        # Updates the display for press of this key
-        # try:
-            if key == 'enter text':
-                blink = Rectangle(Point(2.5, 2.1), Point(2.6, 2.2))  # notifies the user to type
-                blink.setFill('red')
-                blink.draw(self.win)
-                information = self.inputBar() #saves the info for the if conditional
+    # Updates the display for press of this key
+        if key == 'enter text':
+            blink = Rectangle(Point(2.5, 2.1), Point(2.6, 2.2))  # notifies the user to type
+            blink.setFill('red')
+            blink.draw(self.win)
+            information = self.inputBar() #saves the info for the if conditional
+            blink.undraw()
+            try:
                 newinfo = int(information)
-                blink.undraw()
                 if 50 <= newinfo:
                     self.win.close()
                     newin = highrisk() #opens the next window
@@ -1162,15 +1172,17 @@ class pmgmt(VirtualBroker, Welcome):
                     newin = lowrisk()
                     while True:
                         newin.run()
-            elif key == "Back":
-                self.win.close()
-                newin = self.prevScene() #looks for the variable that the back button should go to
-                while True:
-                    newin.run()
-        # except:
-            error = Text(Point(6, .6), "ERROR. Please enter a numeric value") #activates if non str
-            error.draw(self.win)
-            error.setTextColor('white')
+            except:
+                error = Text(Point(6, .6), "ERROR. Please enter a numeric value") #activates if non str
+                try:
+                    error.draw(self.win)
+                except:
+                    sys.exit()
+        elif key == "Back":
+            self.win.close()
+            newin = self.prevScene() #looks for the variable that the back button should go to
+            while True:
+                newin.run()
 
 
 class highrisk(VirtualBroker):
@@ -2132,20 +2144,20 @@ class income(VirtualBroker):
 
     def processButton(self, key):
         if key == "Greater than $132,000":
-            global income
-            income = 1
+            global income1
+            income1 = 1
             self.win.close()
             newin = employment()
             while True:
                 newin.run()
         elif key == "Between $50,001 and $132,000":
-            income = 2
+            income1 = 2
             self.win.close()
             newin = employment()
             while True:
                 newin.run()
         elif key == "$50,000 or less":
-            income = 3
+            income1 = 3
             self.win.close()
             newin = employment()
             while True:
