@@ -1,6 +1,7 @@
 from graphics import *
 from button import Button
-
+import smtplib
+import sys
 
 class Welcome:
     def __init__(self):
@@ -40,7 +41,7 @@ class Welcome:
         textbox1.setFill("white")
 
         # Creates text for welcome
-        welcometext = Text(Point(5, 8), "Welcome! \n Please enter your name.")
+        welcometext = Text(Point(5, 8), "Welcome! \n Please enter your email")
         welcometext.setSize(20)
         welcometext.draw(self.win)
 
@@ -57,7 +58,9 @@ class Welcome:
     def __createFile(self):
         name = self.inputBar()
         global FileName
+        global email
         FileName = str(name) + ".txt"
+        email = name
         stocklist = open(FileName, "w")
         stocklist.close()
 
@@ -82,6 +85,10 @@ class Welcome:
             if p == "Shift_L" or p == "Shift_R":
                 self.textB.setText(" " + index)
                 continue
+            if p == "at":
+                index += "@"
+                self.textB.setText(" " + index)
+                continue
             index += str(p)  # Adds String
             self.textB.setText(" " + index)
 
@@ -102,48 +109,104 @@ class VirtualBroker:  # name change
 
     def __createButtons(self):
 
-        bsort = [(7, 1.5, "Retirement Planning"), (7, 3, "Portfolio Management"),  #
+        bsort = [(2, 1, "Email and Exit"), (7, 1.5, "Retirement Planning"), (7, 3, "Portfolio Management"),
                  (7, 4.5, "Market/Industry Trends"), (7, 6, "Stock Picking")]
         self.buttons = []
         for (cx, cy, label) in bsort:
+            if label == "Email and Exit":
+                self.buttons.append(Button(self.win, Point(cx, cy), 2, 1.2, label))
+                continue
             self.buttons.append(Button(self.win, Point(cx, cy), 4, 1.2, label))
         for b in self.buttons:
             b.activate()
 
     def __createDisplay(self):
+        # Creates Textbox for heading
         bg = Rectangle(Point(1.4, 9.2), Point(8.6, 8.2))  #
         bg.setFill('white')  #
         bg.setOutline("gold")  #
         bg.setWidth(4)  #
         bg.draw(self.win)
-        a = Line(Point(5, 7), Point(8.9, 7))
-        a.draw(self.win)
         text = Text(Point(5, 8.7), "Welcome to Our Virtual Broker!")
         text.draw(self.win)
         text.setFace("courier")
         text.setStyle("bold")
         text.setSize(18)
         self.display = text
+
+        # Creates service text
+        a = Line(Point(5, 7), Point(8.9, 7))
+        a.draw(self.win)
         text1 = Text(Point(7, 7.2), "Please select a service:")
         text1.draw(self.win)
         text1.setFace("courier")
         text1.setStyle("bold")
         text1.setSize(14)
         self.display = text1
-        c = Rectangle(Point(.5, 1), Point(3.5, 7))
+
+        # Creates box for Jerry
+        c = Rectangle(Point(.5, 2), Point(3.5, 8))
         c.setFill('black')
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
-        image = Image(Point(2, 4), "myrodin.gif")
+
+        # Create Jerry
+        image = Image(Point(2, 5), "myrodin.gif")
         image.draw(self.win)
-        text2 = Text(Point(2, 1.5), "Secure Your Future.")
+        text2 = Text(Point(2, 2.5), "Secure Your Future.")
         text2.setTextColor('white')
         text2.setSize(10)
         text2.setFace("courier")
         text2.setStyle("bold")
         text2.draw(self.win)
         self.display = text2
+
+    def __searchfile(self):
+        textL = self.__openfile()
+        self.portfolio ,self.stocks = self.__listextract(textL)
+
+    def __openfile(self):
+        file1 = open(FileName, 'r')
+        fileR = file1.read()
+        text = fileR
+        file1.close()
+        list1 = text.split('\t')
+        list1.pop()
+        list1.sort()
+        return list1
+
+    def __listextract(self, l1):
+        portfolio = l1.pop(0)
+
+        stock = list()
+        for item in l1:
+            if "Stock" not in item:
+                break
+            else:
+                stock.append(item)
+
+        stockM = list()
+        for item in stock:
+            edit = item[7:]
+            stockM.append(edit)
+        stocks = "\t".join(stockM)
+
+        return portfolio, stocks
+
+    def __email(self):
+        self. __searchfile()
+        logininfo = ['jerryvbroker@gmail.com', 'CS121AFinal']
+
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.ehlo()
+        server.login(logininfo[0],logininfo[1])
+        server.sendmail(logininfo[0], email, "Here is your financial report!" + '\n\n'
+                                                "Suggested Portfolio:" + self.portfolio[11:] + '\n\n'
+                                                'Archived Stocks:' + self.stocks + '\n\n\n'
+                                                'Good Luck!\n'
+                                                'Jerry')
+        server.close()
 
     def setScene(self):
         raise NotImplementedError("Subclass must implement abstract method")
@@ -176,12 +239,17 @@ class VirtualBroker:  # name change
             newin = retirement()
             while True:
                 newin.run()
+        if key == 'Email and Exit':
+            self.__email()
+            self.win.close()
+            sys.exit()
 
     def run(self):
         while True:
+            if self.win.isClosed():
+                break
             key = self.getButton()
             self.processButton(key)
-
 
 #######################################################################
 ## Danny's Section
@@ -607,7 +675,7 @@ class divyield(VirtualBroker, Welcome):
         return stockpicking
 
     def processButton(self, key):
-        try:
+        # try:
             if key == "Back":
                 self.win.close()
                 newin = self.prevScene()
@@ -630,7 +698,7 @@ class divyield(VirtualBroker, Welcome):
                     newin = dontbuy()
                     while True:
                         newin.run()
-        except:
+        # except:
             error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
             error.draw(self.win)
 
@@ -828,7 +896,7 @@ class projearn(VirtualBroker, Welcome):
         return buy
 
     def processButton(self, key):
-        try:
+        # try:
             if key == "Back":
                 self.win.close()
                 newin = self.prevScene()
@@ -857,7 +925,7 @@ class projearn(VirtualBroker, Welcome):
                 fifteen.draw(self.win)
                 twenty = Text(Point(4, 1), "-Earnings of twenty percent: $" + ntwentyper)
                 twenty.draw(self.win)
-        except:
+        # except:
             error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
             error.draw(self.win)
 
@@ -963,7 +1031,7 @@ class filecreator(VirtualBroker, Welcome):
 
     def processButton(self, key):
         #  checks for info stored. No repeat Archive Button.
-        try:
+        # try:
             if key == "Back" and self.storedinfo == 0:
                 self.win.close()
                 newin = self.prevScene()
@@ -989,13 +1057,13 @@ class filecreator(VirtualBroker, Welcome):
             elif key == "Archive" and self.storedinfo == 0:
                 self.fileadd(self.Name, self.Ticker)
                 self.storedinfo = +1
-        except:
+        # except:
             error = Text(Point(4.5, 2.5), "ERROR")
             error.draw(self.win)
 
     def fileadd(self, name, ticker):
         fileappend = open(FileName, 'a')
-        fileappend.write(str(name) + " " + str(ticker) + '\t')
+        fileappend.write("Stock: " + str(name) + " " + "$" + str(ticker) + '\t')
         fileappend.close()
         stored = Text(Point(5, 2), "Your file has been stored. \n Please click 'Back' to return to the main menu")
         stored.setSize(10)
@@ -1073,7 +1141,7 @@ class pmgmt(VirtualBroker, Welcome):
 
     def processButton(self, key):
         # Updates the display for press of this key
-        try:
+        # try:
             if key == 'enter text':
                 blink = Rectangle(Point(2.5, 2.1), Point(2.6, 2.2))  # notifies the user to type
                 blink.setFill('red')
@@ -1096,7 +1164,7 @@ class pmgmt(VirtualBroker, Welcome):
                 newin = self.prevScene() #looks for the variable that the back button should go to
                 while True:
                     newin.run()
-        except:
+        # except:
             error = Text(Point(6, .6), "ERROR. Please enter a numeric value") #activates if non str
             error.draw(self.win)
             error.setTextColor('white')
@@ -1179,7 +1247,7 @@ class highrisk(VirtualBroker):
     def processButton(self, key):
         if key == 'Long Term':
             fileappend = open(FileName, 'a') #opens the user save file and appends the portfolio stats
-            fileappend.write("Stocks: 70%, Bonds: 25%, Cash: 5%, expected return 6 years 20% +/- 10%")
+            fileappend.write("Portfolio: Stocks: 70%, Bonds: 25%, Cash: 5%, expected return 6 years 20% +/- 10%\t")
             fileappend.close()
             self.win.close()
             newin = hrlt()
@@ -1187,7 +1255,7 @@ class highrisk(VirtualBroker):
                 newin.run()
         if key == 'Short Term':
             fileappend = open(FileName, 'a') #user save file
-            fileappend.write("Stocks: 80%, Bonds: 15%, Cash: 5%, expected return 3 years 24% +/- 19%")
+            fileappend.write("Portfolio: Stocks: 80%, Bonds: 15%, Cash: 5%, expected return 3 years 24% +/- 19%\t")
             fileappend.close()
             self.win.close()
             newin = hrst()
@@ -1277,7 +1345,7 @@ class lowrisk(VirtualBroker):
     def processButton(self, key):
         if key == 'Long Term':
             fileappend = open(FileName, 'a') #user save file
-            fileappend.write("Stocks: 40%, Bonds: 50%, Cash: 10%, expected return 12 years 8% +/- 2%")
+            fileappend.write("Portfolio: Stocks: 40%, Bonds: 50%, Cash: 10%, expected return 12 years 8% +/- 2%\t")
             fileappend.close()
             self.win.close()
             newin = lrlt()
@@ -1285,7 +1353,7 @@ class lowrisk(VirtualBroker):
                 newin.run()
         if key == 'Short Term':
             fileappend = open(FileName, 'a') #user save file
-            fileappend.write("Stocks: 50%, Bonds: 40%, Cash: 10%, expected return 3 years 4% +/- 1%")
+            fileappend.write("Portfolio: Stocks: 50%, Bonds: 40%, Cash: 10%, expected return 3 years 4% +/- 1%\t")
             fileappend.close()
             self.win.close()
             newin = lrst()
@@ -1618,7 +1686,6 @@ class lrst(VirtualBroker): #final user screen
                 newin.run()
 
 
-
 ###################################################################################################
 class MarketIndustryTrends(VirtualBroker):
     def __init__(self):
@@ -1921,6 +1988,7 @@ class RusselTop200(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+
 
 ###################################################################################################
 class retirement(VirtualBroker):
@@ -2428,7 +2496,6 @@ post-tax savings plans.""")
 
 
 Welcome()  # calls start
-
 if __name__ == '__main__':
-    theCalc1 = VirtualBroker()
-    theCalc1.run()
+    virtualB = VirtualBroker()
+    virtualB.run()
