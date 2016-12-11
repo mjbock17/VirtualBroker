@@ -670,6 +670,7 @@ class divyield(VirtualBroker, Welcome):
         textbox = Text(Point(5, 3.5), "")  # Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
+        self.error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value") # Creates incase of Error
 
     def setScene(self):
         return stockpicking
@@ -681,6 +682,7 @@ class divyield(VirtualBroker, Welcome):
             while True:
                 newin.run()
         elif key == "Click to Enter":
+            self.error.undraw()
             blink = Rectangle(Point(4.1, 4.1), Point(4.2, 4.2))  # notifies the user to type
             blink.setFill('red')
             blink.draw(self.win)
@@ -699,9 +701,8 @@ class divyield(VirtualBroker, Welcome):
                     while True:
                         newin.run()
             except:
-                error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value") ###Creates incase of Error
                 try:
-                    error.draw(self.win)
+                    self.error.draw(self.win)
                 except:
                     sys.exit()
 
@@ -894,6 +895,7 @@ class projearn(VirtualBroker, Welcome):
         textbox = Text(Point(5.7, 5.3), "")  # Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
+        self.error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
 
     def setScene(self):
         return buy
@@ -905,6 +907,7 @@ class projearn(VirtualBroker, Welcome):
             while True:
                 newin.run()
         elif key == "Click to Enter":
+            self.error.undraw()
             blink = Rectangle(Point(2.3, 5.8), Point(2.2, 5.9))  # notifies the user to type
             blink.setFill('red')
             blink.draw(self.win)
@@ -929,9 +932,8 @@ class projearn(VirtualBroker, Welcome):
                 twenty = Text(Point(4, 1), "-Earnings of twenty percent: $" + ntwentyper)
                 twenty.draw(self.win)
             except:
-                error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
                 try:
-                    error.draw(self.win)
+                    self.error.draw(self.win)
                 except:
                     sys.exit()
 
@@ -1005,6 +1007,8 @@ class filecreator(VirtualBroker, Welcome):
         textbox.draw(self.win)
         self.textA = textbox  # creates a textbox variable
 
+        self.error = Text(Point(4.5, 2.5), "ERROR")
+
     def __storeName(self, name):
         self.Name = name
 
@@ -1051,6 +1055,7 @@ class filecreator(VirtualBroker, Welcome):
             while True:
                 newin.run()
         elif key == "Click to Enter 'ticker'":
+            self.error.undraw()
             blink = Rectangle(Point(5.8, 3.8), Point(5.9, 3.9))  # notifies the user to type
             blink.setFill('red')
             blink.draw(self.win)
@@ -1058,6 +1063,7 @@ class filecreator(VirtualBroker, Welcome):
             blink.undraw()
             self.__storeTicker(ticker)
         elif key == "Click to Enter Name":
+            self.error.undraw()
             blink1 = Rectangle(Point(5.8, 5.1), Point(5.9, 5.2))
             blink1.setFill('red')
             blink1.draw(self.win)
@@ -1065,13 +1071,13 @@ class filecreator(VirtualBroker, Welcome):
             blink1.undraw()
             self.__storeName(name)
         elif key == "Archive" and self.storedinfo == 0:
+            self.error.undraw()
             try:
                 self.fileadd(self.Name, self.Ticker)
                 self.storedinfo = +1
             except:
-                error = Text(Point(4.5, 2.5), "ERROR")
                 try:
-                    error.draw(self.win)
+                    self.error.draw(self.win)
                 except:
                     sys.exit()
 
@@ -1109,6 +1115,8 @@ class pmgmt(VirtualBroker, Welcome):
         textbox = Text(Point(7.5, 1.5), "")  # Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
+
+        self.error = Text(Point(6, .6), "ERROR. Please enter a numeric value") #activates if non str
 
     def __bgimg(self): #sets the gradient background
         bg = Image(Point(5, 5), "gradient.gif")
@@ -1155,6 +1163,7 @@ class pmgmt(VirtualBroker, Welcome):
     def processButton(self, key):
     # Updates the display for press of this key
         if key == 'enter text':
+            self.error.undraw()
             blink = Rectangle(Point(2.5, 2.1), Point(2.6, 2.2))  # notifies the user to type
             blink.setFill('red')
             blink.draw(self.win)
@@ -1173,7 +1182,6 @@ class pmgmt(VirtualBroker, Welcome):
                     while True:
                         newin.run()
             except:
-                error = Text(Point(6, .6), "ERROR. Please enter a numeric value") #activates if non str
                 try:
                     error.draw(self.win)
                 except:
