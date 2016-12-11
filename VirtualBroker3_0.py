@@ -1017,6 +1017,9 @@ class filecreator(VirtualBroker, Welcome):
                 index += "."
                 self.textA.setText(" " + index)
                 continue
+            if p == "Shift_L" or p == "Shift_R":
+                self.textA.setText(" " + index)
+                continue
             index += str(p)  # Adds String
             self.textA.setText(" " + index)
 
