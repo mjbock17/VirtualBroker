@@ -167,8 +167,8 @@ class VirtualBroker:  # Hub of VB
 
     def __searchfile(self):  # obtains info from text file
         textL = self.__openfile()
-        self.portfolio, self.stocks = self.__listextract(textL)
-        if (self.portfolio or self.stocks) == False:  # Checks to see if self.portfolio, ect exists
+        self.portfolio, self.stocks, self.retirement = self.__listextract(textL)
+        if (self.portfolio or self.stocks or self.retirement) == False:  # Checks to see if self.portfolio, ect exists
             return False
 
     def __openfile(self):  # Opens file
@@ -184,8 +184,9 @@ class VirtualBroker:  # Hub of VB
     def __listextract(self, l1):  # extracts portfolio and stock information
         pt = False  # necessary initialization
         st = False
+        rt = False
         for item in l1:
-            if (pt and st) == True:  # stops loop once both stocks and portfolio are found
+            if (pt and st and rt) == True:  # stops loop once both stocks and portfolio are found
                 break
             if "Portfolio:" in item:
                 pt = True
@@ -193,9 +194,13 @@ class VirtualBroker:  # Hub of VB
             if "Stock:" in item:
                 st = True
                 continue
-        if pt == False or st == False:  # if neither are found, program ends--returns false
-            return False, False
+            if "Retirement" in item:
+                rt = True
+                continue
+        if pt == False or st == False or rt == False:  # if none are found, program ends--returns false
+            return False, False, False
         portfolio = l1.pop(0)  # portfolio is first position in list
+        retirement = l1.pop(0)  # Retirement is last in list
         stock = list()  # creates stock list
         for item in l1:  # adds stored stocks to list
             if "Stock" not in item:
@@ -207,7 +212,7 @@ class VirtualBroker:  # Hub of VB
             edit = item[7:]
             stockM.append(edit)
         stocks = "\t".join(stockM)
-        return portfolio, stocks
+        return portfolio, stocks, retirement
 
     def __email(self):
         self.__searchfile()
@@ -219,7 +224,8 @@ class VirtualBroker:  # Hub of VB
         # email message
         server.sendmail(logininfo[0], email, "Here is your financial report!" + '\n\n'
                                              "Suggested Portfolio:" + self.portfolio[11:] + '\n\n'
-                                             'Archived Stocks:' + self.stocks + '\n\n\n'
+                                             'Archived Stocks:' + self.stocks + '\n\n'
+                                             'Suggested Retirement Plan: ' + self.retirement[12:] + '\n\n\n'
                                              'Good Luck!\n'
                                              'Jerry')
         server.close()
@@ -2427,6 +2433,9 @@ from the account.""")
     def processButton(self, key):
         if key == "Home":
             self.win.close()
+            fileappend = open(FileName, 'a')  # calls global variable FileName
+            fileappend.write("Retirement: " + '401(k)' + '\t')
+            fileappend.close()
             newin = VirtualBroker()
             while True:
                 newin.run()
@@ -2511,6 +2520,9 @@ withdrawn tax and penalty-free at any time.""")
     def processButton(self, key):
         if key == "Home":
             self.win.close()
+            fileappend = open(FileName, 'a')  # calls global variable FileName
+            fileappend.write("Retirement: " + 'Roth IRA' + '\t') # Adds type of retirement plan
+            fileappend.close()
             newin = VirtualBroker()
             while True:
                 newin.run()
@@ -2595,10 +2607,12 @@ post-tax savings plans.""")
     def processButton(self, key):
         if key == "Home":
             self.win.close()
+            fileappend = open(FileName, 'a')  # calls global variable FileName # Adds retirement plan
+            fileappend.write("Retirement: " + 'Traditional IRA' + '\t')
+            fileappend.close()
             newin = VirtualBroker()
             while True:
                 newin.run()
-
 
 ###################################################################################################
 
