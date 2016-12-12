@@ -2048,7 +2048,7 @@ class RusselTop200(VirtualBroker):
 ###################################################################################################
 class retirement(VirtualBroker):
     def __init__(self):
-        # creates window for GUI
+        # creates window for GUI, the initial page for all of the retirement planning subpages
         win = GraphWin("Retirement Planning", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
@@ -2060,10 +2060,12 @@ class retirement(VirtualBroker):
         self.prevScene = self.setScene()
 
     def __bgimg(self):
+        # creates the background image, using the "wood" picture
         bg = Image(Point(5, 5), "wood.gif")
         bg.draw(self.win)
 
     def __createButtons(self):
+        #creates all of the buttons, setting up the subsequent pathways
         bsort = [(1, 1, "Back"), (4, 1.5, "51-70 Years Old"), (4, 3.5, "31-50 Years Old"), (4, 5.5, "18-30 Years Old")]
         self.buttons = []
         for (cx, cy, label) in bsort:
@@ -2075,6 +2077,7 @@ class retirement(VirtualBroker):
             b.activate()
 
     def __createDisplay(self):
+        #creates the display for the retirement planning page
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.setOutline('gold')
@@ -2095,6 +2098,7 @@ class retirement(VirtualBroker):
         ageText.setFace('courier')
 
     def __makeJerry(self):
+        #creates Jerry, the financial advisor
         jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
         jerry.setFill('black')
         jerry.setOutline('gold')
@@ -2104,9 +2108,11 @@ class retirement(VirtualBroker):
         image.draw(self.win)
 
     def setScene(self):
+        #abstract class that allows for a back button
         return VirtualBroker
 
     def processButton(self, key):
+        #allows the buttons to be pressed and moved to the next page in the pathway
         if key == '18-30 Years Old':
             global age
             age = 1
@@ -2134,7 +2140,7 @@ class retirement(VirtualBroker):
 
 class income(VirtualBroker):
     def __init__(self):
-        # creates window for GUI
+        # creates window for Income GUI
         win = GraphWin("Income Inquiry", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
@@ -2221,7 +2227,7 @@ class income(VirtualBroker):
 
 class employment(VirtualBroker):
     def __init__(self):
-        # creates window for GUI
+        # creates window for Employment GUI
         win = GraphWin("Employment Evaluation", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
@@ -2304,7 +2310,7 @@ class employment(VirtualBroker):
 
 class FourO(VirtualBroker):
     def __init__(self):
-        # creates window for GUI
+        # creates window for  401K GUI
         win = GraphWin("401K", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
@@ -2386,7 +2392,7 @@ from the account.""")
 
 class RothIRA(VirtualBroker):
     def __init__(self):
-        # creates window for GUI
+        # creates window for Roth IRA GUI
         win = GraphWin("Roth IRA", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
@@ -2469,7 +2475,7 @@ withdrawn tax and penalty-free at any time.""")
 
 class IRA(VirtualBroker):
     def __init__(self):
-        # creates window for GUI
+        # creates window for IRA GUI
         win = GraphWin("Traditional IRA", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
