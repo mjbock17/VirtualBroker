@@ -2252,7 +2252,7 @@ class employment(VirtualBroker):
         employmentInput.draw(self.win)
         employmentText = Text(Point(3.8, 7.2), "What is your employment status?")
         employmentText.draw(self.win)
-        employmentText.setSize(18)
+        employmentText.setSize(15)
         employmentText.setFace('courier')
 
     def __makeJerry(self):
