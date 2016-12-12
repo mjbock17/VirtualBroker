@@ -118,22 +118,22 @@ class VirtualBroker:  # Hub of VB
     def __createButtons(self):
 
         bsort = [(2, 1, "Email and Exit"), (7, 1.5, "Retirement Planning"), (7, 3, "Portfolio Management"),
-                 (7, 4.5, "Market/Industry Trends"), (7, 6, "Stock Picking")]
+                 (7, 4.5, "Market/Industry Trends"), (7, 6, "Stock Picking")]  # Creates buttons
         self.buttons = []
-        for (cx, cy, label) in bsort:
+        for (cx, cy, label) in bsort:  # loop to process buttons
             if label == "Email and Exit":
                 self.buttons.append(Button(self.win, Point(cx, cy), 2, 1.2, label))
                 continue
             self.buttons.append(Button(self.win, Point(cx, cy), 4, 1.2, label))
         for b in self.buttons:
-            b.activate()
+            b.activate()  # activates each button
 
     def __createDisplay(self):
         # Creates Textbox for heading
-        bg = Rectangle(Point(1.4, 9.2), Point(8.6, 8.2))  #
-        bg.setFill('white')  #
-        bg.setOutline("gold")  #
-        bg.setWidth(4)  #
+        bg = Rectangle(Point(1.4, 9.2), Point(8.6, 8.2))
+        bg.setFill('white')
+        bg.setOutline("gold")
+        bg.setWidth(4)
         bg.draw(self.win)
         text = Text(Point(5, 8.7), "Welcome to Our Virtual Broker!")
         text.draw(self.win)
@@ -403,14 +403,14 @@ class retain_peGUI(VirtualBroker):
         return stockpicking
 
     def processButton(self, key):
-        if key == "PE greater than or equal to 18":  #
-            self.win.close()  #
+        if key == "PE greater than or equal to 18":
+            self.win.close()
             newin = dontbuy()
             while True:
                 newin.run()
-        elif key == 'PE less than 18, greater than zero':  #
-            self.win.close()  #
-            newin = divyield()  #
+        elif key == 'PE less than 18, greater than zero':
+            self.win.close()
+            newin = divyield()
             while True:
                 newin.run()
         elif key == 'Negative/Zero PE':
