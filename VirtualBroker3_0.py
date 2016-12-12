@@ -60,7 +60,7 @@ class Welcome:
     def __createFile(self):
         while True:
             name = self.inputBar()
-            if ("@stolaf.edu" or "@gmail.com") not in name:
+            if "@stolaf.edu" not in name and "@gmail.com" not in name:
                 self.welcometext.setText('Please enter a valid email. \n I.E. @stolaf.edu or @gmail.com')
                 self.welcometext.setSize(16)
             else:
@@ -1868,7 +1868,6 @@ class SandP500(VirtualBroker):
         return MarketIndustryTrends
 
     def processButton(self, key):
-
         if key == "Back":
             self.win.close()
             newin = self.prevScene()
@@ -1921,7 +1920,6 @@ class Nasdaq(VirtualBroker):
         return MarketIndustryTrends
 
     def processButton(self, key):
-
         if key == "Back":
             self.win.close()
             newin = self.prevScene()
