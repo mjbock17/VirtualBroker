@@ -4,7 +4,7 @@ import smtplib
 import sys
 
 
-class Welcome: # First class, includes inputBar method
+class Welcome:  # First class, includes inputBar method
     def __init__(self):
         win = GraphWin("Welcome", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -65,7 +65,7 @@ class Welcome: # First class, includes inputBar method
                 self.welcometext.setSize(16)
             else:
                 break
-        global FileName   # necessary for integration across classes
+        global FileName  # necessary for integration across classes
         global email  # see above
         FileName = str(name) + ".txt"
         email = name
@@ -86,14 +86,14 @@ class Welcome: # First class, includes inputBar method
             if p == "space":  # adds a space when the space bar is hit!
                 index += " "
                 continue
-            if p == "period": # adds a period
+            if p == "period":  # adds a period
                 index += "."
                 self.textB.setText(" " + index)
                 continue
-            if p == "Shift_L" or p == "Shift_R": # adds shift functionality
+            if p == "Shift_L" or p == "Shift_R":  # adds shift functionality
                 self.textB.setText(" " + index)
                 continue
-            if p == "at": # adds @ symbol
+            if p == "at":  # adds @ symbol
                 index += "@"
                 self.textB.setText(" " + index)
                 continue
@@ -221,10 +221,10 @@ class VirtualBroker:  # Hub of VB
                                              "Suggested Portfolio:" + self.portfolio[11:] + '\n\n'
                                              'Archived Stocks:' + self.stocks + '\n\n\n'
                                              'Good Luck!\n'
-                                              'Jerry')
+                                             'Jerry')
         server.close()
 
-    def setScene(self): # abstract method
+    def setScene(self):  # abstract method
         raise NotImplementedError("Subclass must implement abstract method")
 
     def getButton(self):  # uses loop to determine if button is clicked or not
@@ -728,17 +728,17 @@ class divyield(VirtualBroker, Welcome):
             blink.undraw()
             try:
                 divyield1 = float(information)
-                if divyield1 > 1.5: # Checks for desired ratio
+                if divyield1 > 1.5:  # Checks for desired ratio
                     self.win.close()
                     newin = buy()
                     while True:
                         newin.run()
-                else: # Non-float number
+                else:  # Non-float number
                     self.win.close()
                     newin = dontbuy()
                     while True:
                         newin.run()
-            except: # Necessary to get rid of win.closed error
+            except:  # Necessary to get rid of win.closed error
                 try:
                     self.error.draw(self.win)
                 except:
@@ -815,7 +815,7 @@ class dontbuy(VirtualBroker):
         reason4.setFace('courier')
 
     def setScene(self):
-        return VirtualBroker # No need to go back to previous scene
+        return VirtualBroker  # No need to go back to previous scene
 
     def processButton(self, key):
         if key == 'Return to home page':
@@ -956,7 +956,7 @@ class projearn(VirtualBroker, Welcome):
         textbox = Text(Point(5.7, 5.3), "")  # Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
-        self.error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value") # For try/except
+        self.error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")  # For try/except
 
     def setScene(self):
         return buy
@@ -1071,9 +1071,9 @@ class filecreator(VirtualBroker, Welcome):  # appends to file
         textbox.draw(self.win)
         self.textA = textbox  # creates a textbox variable
 
-        self.error = Text(Point(4.5, 2.5), "ERROR") # Error for Try/except
+        self.error = Text(Point(4.5, 2.5), "ERROR")  # Error for Try/except
 
-    def __storeName(self, name): # Method necessary to avoid global variable
+    def __storeName(self, name):  # Method necessary to avoid global variable
         self.Name = name
 
     def __storeTicker(self, ticker):  # method necessary to avoid global variable
@@ -1145,7 +1145,7 @@ class filecreator(VirtualBroker, Welcome):  # appends to file
                 except:
                     sys.exit()
 
-    def fileadd(self, name, ticker): # appends to file
+    def fileadd(self, name, ticker):  # appends to file
         fileappend = open(FileName, 'a')  # calls global variable FileName
         fileappend.write("Stock: " + str(name) + " " + str(ticker) + '\t')
         fileappend.close()
@@ -1777,9 +1777,9 @@ class lrst(VirtualBroker):  # final user screen
 ###################################################################################################
 class MarketIndustryTrends(VirtualBroker):
     def __init__(self):
-        #creates window for GUI
-        win = GraphWin("Market/Industry Trends",700,500)
-        win.setCoords(0,0,10,10)
+        # creates window for GUI
+        win = GraphWin("Market/Industry Trends", 700, 500)
+        win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
         self.__bgimg()
@@ -1788,60 +1788,59 @@ class MarketIndustryTrends(VirtualBroker):
         self.__makeJerry()
         self.prevScene = self.setScene()
 
-
     def __bgimg(self):
-        #background image
-        bg = Image(Point(5,5),"wood.gif")
-        bg.draw(self.win) 
+        # background image
+        bg = Image(Point(5, 5), "wood.gif")
+        bg.draw(self.win)
 
     def __createButtons(self):
 
-        #creates the list of buttons
-        bsort = [(1, 1, "Back"),(3,6.25,"S&P 500"),(3,5,"Dow Jones"),
-                 (3,3.75,"NASDAQ"),(3,2.5,"Russel Top 200")]
+        # creates the list of buttons
+        bsort = [(1, 1, "Back"), (3, 6.25, "S&P 500"), (3, 5, "Dow Jones"),
+                 (3, 3.75, "NASDAQ"), (3, 2.5, "Russel Top 200")]
         self.buttons = []
-        #creates the odd shaped buttons
-        for (cx,cy,label) in bsort:
+        # creates the odd shaped buttons
+        for (cx, cy, label) in bsort:
             if label == "Back":
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
-                self.buttons.append(Button(self.win,Point(cx,cy),4,.75,label))
-        #activates all buttons
+                self.buttons.append(Button(self.win, Point(cx, cy), 4, .75, label))
+        # activates all buttons
         for b in self.buttons:
             b.activate()
 
     def __makeJerry(self):
-        #Creates the assistant Jerry
-        c = Rectangle(Point(6.5,2),Point(8.5,7))
+        # Creates the assistant Jerry
+        c = Rectangle(Point(6.5, 2), Point(8.5, 7))
         c.setFill('black')
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
-        image = Image(Point(7.5,4.5),"myrodin.gif")
+        image = Image(Point(7.5, 4.5), "myrodin.gif")
         image.draw(self.win)
-        text2 = Text(Point(7.5,1.5),"Please select a Market \n to view its index.")
+        text2 = Text(Point(7.5, 1.5), "Please select a Market \n to view its index.")
         text2.setTextColor('white')
         text2.setSize(15)
         text2.setFace("courier")
         text2.setStyle("bold")
         text2.draw(self.win)
-        
+
     def __createDisplay(self):
-        #Creates Title
-        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        # Creates Title
+        head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5,8.5), "Market/Industry Trends")
+        title = Text(Point(5, 8.5), "Market/Industry Trends")
         title.draw(self.win)
         title.setSize(15)
         title.setStyle("bold")
 
     def setScene(self):
-        #Back button calls on previous class 
+        # Back button calls on previous class
         return VirtualBroker
 
     def processButton(self, key):
-        #selection of specific markets
+        # selection of specific markets
         if key == 'S&P 500':
             self.win.close()
             newin = SandP500()
@@ -1867,16 +1866,13 @@ class MarketIndustryTrends(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
-        else:
-            # Normal key press, append it to the end of the display
-            self.display.setText(text+key)
 
 class SandP500(VirtualBroker):
-    #Displays the SandP500 data
+    # Displays the SandP500 data
     def __init__(self):
-        #creates window for GUI
-        win = GraphWin("SandP500",700,500)
-        win.setCoords(0,0,10,10)
+        # creates window for GUI
+        win = GraphWin("SandP500", 700, 500)
+        win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
         self.__bgimg()
@@ -1886,35 +1882,35 @@ class SandP500(VirtualBroker):
         self.prevScene = self.setScene()
 
     def __bgimg(self):
-        bg = Image(Point(5,5),"wood.gif")
+        bg = Image(Point(5, 5), "wood.gif")
         bg.draw(self.win)
 
     def __createButtons(self):
         bsort = [(1, 1, "Back")]
         self.buttons = []
-        for (cx,cy,label) in bsort:
+        for (cx, cy, label) in bsort:
             if label == "Back":
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
-                self.buttons.append(Button(self.win,Point(cx,cy),4,.75,label))
+                self.buttons.append(Button(self.win, Point(cx, cy), 4, .75, label))
         for b in self.buttons:
             b.activate()
-            
+
     def __createDisplay(self):
-        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5,8.5), "S&P500")
+        title = Text(Point(5, 8.5), "S&P500")
         title.draw(self.win)
         title.setSize(15)
         title.setStyle("bold")
 
     def __graph(self):
-        graph = Image(Point(5,5),"sandp500.gif")
+        graph = Image(Point(5, 5), "sandp500.gif")
         graph.draw(self.win)
 
     def setScene(self):
-        return MarketIndustryTrends 
+        return MarketIndustryTrends
 
     def processButton(self, key):
 
@@ -1923,13 +1919,14 @@ class SandP500(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+
 
 class Nasdaq(VirtualBroker):
-    #Creates the image for Nasdaq
+    # Creates the image for Nasdaq
     def __init__(self):
-        #creates window for GUI
-        win = GraphWin("Nasdaq",700,500)
-        win.setCoords(0,0,10,10)
+        # creates window for GUI
+        win = GraphWin("Nasdaq", 700, 500)
+        win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
         self.__bgimg()
@@ -1939,35 +1936,35 @@ class Nasdaq(VirtualBroker):
         self.prevScene = self.setScene()
 
     def __bgimg(self):
-        bg = Image(Point(5,5),"wood.gif")
+        bg = Image(Point(5, 5), "wood.gif")
         bg.draw(self.win)
 
     def __createButtons(self):
         bsort = [(1, 1, "Back")]
         self.buttons = []
-        for (cx,cy,label) in bsort:
+        for (cx, cy, label) in bsort:
             if label == "Back":
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
-                self.buttons.append(Button(self.win,Point(cx,cy),4,.75,label))
+                self.buttons.append(Button(self.win, Point(cx, cy), 4, .75, label))
         for b in self.buttons:
             b.activate()
-            
+
     def __createDisplay(self):
-        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5,8.5), "NASDAQ")
+        title = Text(Point(5, 8.5), "NASDAQ")
         title.draw(self.win)
         title.setSize(15)
         title.setStyle("bold")
 
     def __graph(self):
-        graph = Image(Point(5,5),"nasdaq.gif")
+        graph = Image(Point(5, 5), "nasdaq.gif")
         graph.draw(self.win)
 
     def setScene(self):
-        return MarketIndustryTrends 
+        return MarketIndustryTrends
 
     def processButton(self, key):
 
@@ -1976,13 +1973,14 @@ class Nasdaq(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+
 
 class DowJones(VirtualBroker):
-    #Displays the index information for Dow Jones
+    # Displays the index information for Dow Jones
     def __init__(self):
-        #creates window for GUI
-        win = GraphWin("DowJones",700,500)
-        win.setCoords(0,0,10,10)
+        # creates window for GUI
+        win = GraphWin("DowJones", 700, 500)
+        win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
         self.__bgimg()
@@ -1992,36 +1990,35 @@ class DowJones(VirtualBroker):
         self.prevScene = self.setScene()
 
     def __bgimg(self):
-        bg = Image(Point(5,5),"wood.gif")
+        bg = Image(Point(5, 5), "wood.gif")
         bg.draw(self.win)
-
 
     def __createButtons(self):
         bsort = [(1, 1, "Back")]
         self.buttons = []
-        for (cx,cy,label) in bsort:
+        for (cx, cy, label) in bsort:
             if label == "Back":
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
-                self.buttons.append(Button(self.win,Point(cx,cy),4,.75,label))
+                self.buttons.append(Button(self.win, Point(cx, cy), 4, .75, label))
         for b in self.buttons:
             b.activate()
-            
+
     def __createDisplay(self):
-        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5,8.5), "Dow Jones")
+        title = Text(Point(5, 8.5), "Dow Jones")
         title.draw(self.win)
         title.setSize(15)
         title.setStyle("bold")
 
     def __graph(self):
-        graph = Image(Point(5,5),"DowJones.gif")
+        graph = Image(Point(5, 5), "DowJones.gif")
         graph.draw(self.win)
 
     def setScene(self):
-        return MarketIndustryTrends 
+        return MarketIndustryTrends
 
     def processButton(self, key):
 
@@ -2030,13 +2027,14 @@ class DowJones(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+
 
 class RusselTop200(VirtualBroker):
-    #Displays the index information for Russel Top 200 
+    # Displays the index information for Russel Top 200
     def __init__(self):
-        #creates window for GUI
-        win = GraphWin("RusselTop200",700,500)
-        win.setCoords(0,0,10,10)
+        # creates window for GUI
+        win = GraphWin("RusselTop200", 700, 500)
+        win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
         self.__bgimg()
@@ -2046,36 +2044,35 @@ class RusselTop200(VirtualBroker):
         self.prevScene = self.setScene()
 
     def __bgimg(self):
-        bg = Image(Point(5,5),"wood.gif")
+        bg = Image(Point(5, 5), "wood.gif")
         bg.draw(self.win)
-
 
     def __createButtons(self):
         bsort = [(1, 1, "Back")]
         self.buttons = []
-        for (cx,cy,label) in bsort:
+        for (cx, cy, label) in bsort:
             if label == "Back":
                 self.buttons.append(Button(self.win, Point(cx, cy), 1, 1, label))
             else:
-                self.buttons.append(Button(self.win,Point(cx,cy),4,.75,label))
+                self.buttons.append(Button(self.win, Point(cx, cy), 4, .75, label))
         for b in self.buttons:
             b.activate()
-            
+
     def __createDisplay(self):
-        head = Rectangle(Point(1.5,8),Point(8.5,9))
+        head = Rectangle(Point(1.5, 8), Point(8.5, 9))
         head.setFill('white')
         head.draw(self.win)
-        title = Text(Point(5,8.5), "Russel Top 200")
+        title = Text(Point(5, 8.5), "Russel Top 200")
         title.draw(self.win)
         title.setSize(15)
         title.setStyle("bold")
 
     def __graph(self):
-        graph = Image(Point(5,5),"RusselTop200.gif")
+        graph = Image(Point(5, 5), "RusselTop200.gif")
         graph.draw(self.win)
 
     def setScene(self):
-        return MarketIndustryTrends 
+        return MarketIndustryTrends
 
     def processButton(self, key):
 
@@ -2084,6 +2081,7 @@ class RusselTop200(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+
 
 ###################################################################################################
 class retirement(VirtualBroker):
@@ -2105,7 +2103,7 @@ class retirement(VirtualBroker):
         bg.draw(self.win)
 
     def __createButtons(self):
-        #creates all of the buttons, setting up the subsequent pathways
+        # creates all of the buttons, setting up the subsequent pathways
         bsort = [(1, 1, "Back"), (4, 1.5, "51-70 Years Old"), (4, 3.5, "31-50 Years Old"), (4, 5.5, "18-30 Years Old")]
         self.buttons = []
         for (cx, cy, label) in bsort:
@@ -2117,7 +2115,7 @@ class retirement(VirtualBroker):
             b.activate()
 
     def __createDisplay(self):
-        #creates the display for the retirement planning page
+        # creates the display for the retirement planning page
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.setOutline('gold')
@@ -2138,7 +2136,7 @@ class retirement(VirtualBroker):
         ageText.setFace('courier')
 
     def __makeJerry(self):
-        #creates Jerry, the financial advisor
+        # creates Jerry, the financial advisor
         jerry = Rectangle(Point(7, 1.5), Point(9, 6.5))
         jerry.setFill('black')
         jerry.setOutline('gold')
@@ -2148,11 +2146,11 @@ class retirement(VirtualBroker):
         image.draw(self.win)
 
     def setScene(self):
-        #abstract class that allows for a back button
+        # abstract class that allows for a back button
         return VirtualBroker
 
     def processButton(self, key):
-        #allows the buttons to be pressed and moved to the next page in the pathway
+        # allows the buttons to be pressed and moved to the next page in the pathway
         if key == '18-30 Years Old':
             global age
             age = 1
@@ -2177,6 +2175,7 @@ class retirement(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
+
 
 class income(VirtualBroker):
     def __init__(self):
@@ -2265,6 +2264,7 @@ class income(VirtualBroker):
             while True:
                 newin.run()
 
+
 class employment(VirtualBroker):
     def __init__(self):
         # creates window for Employment GUI
@@ -2348,6 +2348,7 @@ class employment(VirtualBroker):
             while True:
                 newin.run()
 
+
 class FourO(VirtualBroker):
     def __init__(self):
         # creates window for  401K GUI
@@ -2429,6 +2430,7 @@ from the account.""")
             newin = VirtualBroker()
             while True:
                 newin.run()
+
 
 class RothIRA(VirtualBroker):
     def __init__(self):
@@ -2513,6 +2515,7 @@ withdrawn tax and penalty-free at any time.""")
             while True:
                 newin.run()
 
+
 class IRA(VirtualBroker):
     def __init__(self):
         # creates window for IRA GUI
@@ -2595,6 +2598,8 @@ post-tax savings plans.""")
             newin = VirtualBroker()
             while True:
                 newin.run()
+
+
 ###################################################################################################
 
 
