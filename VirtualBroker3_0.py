@@ -44,6 +44,7 @@ class Welcome:
         welcometext = Text(Point(5, 8), "Welcome! \n Please enter your email")
         welcometext.setSize(20)
         welcometext.draw(self.win)
+        self.welcometext = welcometext
 
         # Creates Textbox
         textbox2 = Rectangle(Point(3, .5), Point(7, 1.5))
@@ -56,7 +57,13 @@ class Welcome:
         self.textB = text1
 
     def __createFile(self):
-        name = self.inputBar()
+        while True:
+            name = self.inputBar()
+            if ("@stolaf.edu" or "@gmail.com") not in name:
+                self.welcometext.setText('Please enter a valid email. \n I.E. @stolaf.edu or @gmail.com')
+                self.welcometext.setSize(16)
+            else:
+                break
         global FileName
         global email
         FileName = str(name) + ".txt"
@@ -132,7 +139,6 @@ class VirtualBroker:  # name change
         text.setFace("courier")
         text.setStyle("bold")
         text.setSize(18)
-        self.display = text
 
         # Creates service text
         a = Line(Point(5, 7), Point(8.9, 7))
@@ -142,7 +148,6 @@ class VirtualBroker:  # name change
         text1.setFace("courier")
         text1.setStyle("bold")
         text1.setSize(14)
-        self.display = text1
 
         # Creates box for Jerry
         c = Rectangle(Point(.5, 2), Point(3.5, 8))
@@ -160,11 +165,13 @@ class VirtualBroker:  # name change
         text2.setFace("courier")
         text2.setStyle("bold")
         text2.draw(self.win)
-        self.display = text2
+        self.text2 = text2
 
     def __searchfile(self):
         textL = self.__openfile()
-        self.portfolio ,self.stocks = self.__listextract(textL)
+        self.portfolio, self.stocks = self.__listextract(textL)
+        if (self.portfolio or self.stocks) == False:
+            return False
 
     def __openfile(self):
         file1 = open(FileName, 'r')
@@ -177,25 +184,35 @@ class VirtualBroker:  # name change
         return list1
 
     def __listextract(self, l1):
+        pt = False
+        st = False
+        for item in l1:
+            if (pt and st) == True:
+                break
+            if "Portfolio:" in item:
+                pt = True
+                continue
+            if "Stock:" in item:
+                st = True
+                continue
+        if pt == False or st == False:
+            return False, False
         portfolio = l1.pop(0)
-
         stock = list()
         for item in l1:
             if "Stock" not in item:
                 break
             else:
                 stock.append(item)
-
         stockM = list()
         for item in stock:
             edit = item[7:]
             stockM.append(edit)
         stocks = "\t".join(stockM)
-
         return portfolio, stocks
 
     def __email(self):
-        self. __searchfile()
+        self.__searchfile()
         logininfo = ['jerryvbroker@gmail.com', 'CS121AFinal']
 
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
@@ -240,10 +257,13 @@ class VirtualBroker:  # name change
             while True:
                 newin.run()
         if key == 'Email and Exit':
-            self.__email()
-            self.win.close()
-            sys.exit()
-
+            if self.__searchfile() == False:
+                self.text2.setText("Error. Add stocks/portfolio")
+                self.text2.setSize(9)
+            else:
+                self.__email()
+                self.win.close()
+                sys.exit()
     def run(self):
         while True:
             if self.win.isClosed():
@@ -1183,7 +1203,7 @@ class pmgmt(VirtualBroker, Welcome):
                         newin.run()
             except:
                 try:
-                    error.draw(self.win)
+                    self.error.draw(self.win)
                 except:
                     sys.exit()
         elif key == "Back":
@@ -1796,9 +1816,6 @@ class MarketIndustryTrends(VirtualBroker):
             newin = self.prevScene()
             while True:
                 newin.run()
-        else:
-            # Normal key press, append it to the end of the display
-            self.display.setText(text + key)
 
 
 class SandP500(VirtualBroker):
