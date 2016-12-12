@@ -4,7 +4,7 @@ import smtplib
 import sys
 
 
-class Welcome:
+class Welcome: # First class, includes inputBar method
     def __init__(self):
         win = GraphWin("Welcome", 700, 500)
         win.setCoords(0, 0, 10, 10)
@@ -29,7 +29,7 @@ class Welcome:
         c.draw(self.win)
         image = Image(Point(5, 4.3), "myrodin.gif")
         image.draw(self.win)
-        hello = Text(Point(7.8, 5.5), "Hello my name is Jerry!")
+        hello = Text(Point(7.8, 5.5), "Hello, my name is Jerry!")
         hello.setTextColor("white")
         hello.setStyle("bold")
         hello.setSize(16)
@@ -57,16 +57,16 @@ class Welcome:
         text1.draw(self.win)
         self.textB = text1
 
-    def __createFile(self):
+    def __createFile(self):  # Creates file for storing info/stocks/portfolio
         while True:
             name = self.inputBar()
-            if "@stolaf.edu" not in name and "@gmail.com" not in name:
+            if "@stolaf.edu" not in name and "@gmail.com" not in name:  # Checks for correct email formatting
                 self.welcometext.setText('Please enter a valid email. \n I.E. @stolaf.edu or @gmail.com')
                 self.welcometext.setSize(16)
             else:
                 break
-        global FileName
-        global email
+        global FileName   # necessary for integration across classes
+        global email  # see above
         FileName = str(name) + ".txt"
         email = name
         stocklist = open(FileName, "w")
@@ -86,14 +86,14 @@ class Welcome:
             if p == "space":  # adds a space when the space bar is hit!
                 index += " "
                 continue
-            if p == "period":
+            if p == "period": # adds a period
                 index += "."
                 self.textB.setText(" " + index)
                 continue
-            if p == "Shift_L" or p == "Shift_R":
+            if p == "Shift_L" or p == "Shift_R": # adds shift functionality
                 self.textB.setText(" " + index)
                 continue
-            if p == "at":
+            if p == "at": # adds @ symbol
                 index += "@"
                 self.textB.setText(" " + index)
                 continue
@@ -101,15 +101,15 @@ class Welcome:
             self.textB.setText(" " + index)
 
 
-class VirtualBroker:  # name change
+class VirtualBroker:  # Hub of VB
     def __init__(self):
         win = GraphWin("Virtual Broker", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
         self.win = win
-        self.__bgimg()
-        self.__createButtons()
-        self.__createDisplay()
+        self.__bgimg()  # Creates background images
+        self.__createButtons()  # Creates buttons
+        self.__createDisplay()  # Creates display
 
     def __bgimg(self):
         bg = Image(Point(5, 5), "wood.gif")
@@ -140,7 +140,6 @@ class VirtualBroker:  # name change
         text.setFace("courier")
         text.setStyle("bold")
         text.setSize(18)
-
         # Creates service text
         a = Line(Point(5, 7), Point(8.9, 7))
         a.draw(self.win)
@@ -149,14 +148,12 @@ class VirtualBroker:  # name change
         text1.setFace("courier")
         text1.setStyle("bold")
         text1.setSize(14)
-
         # Creates box for Jerry
         c = Rectangle(Point(.5, 2), Point(3.5, 8))
         c.setFill('black')
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
-
         # Create Jerry
         image = Image(Point(2, 5), "myrodin.gif")
         image.draw(self.win)
@@ -168,27 +165,27 @@ class VirtualBroker:  # name change
         text2.draw(self.win)
         self.text2 = text2
 
-    def __searchfile(self):
+    def __searchfile(self):  # obtains info from text file
         textL = self.__openfile()
         self.portfolio, self.stocks = self.__listextract(textL)
-        if (self.portfolio or self.stocks) == False:
+        if (self.portfolio or self.stocks) == False:  # Checks to see if self.portfolio, ect exists
             return False
 
-    def __openfile(self):
+    def __openfile(self):  # Opens file
         file1 = open(FileName, 'r')
         fileR = file1.read()
         text = fileR
         file1.close()
         list1 = text.split('\t')
-        list1.pop()
+        list1.pop()  # removes an empty value in the list
         list1.sort()
         return list1
 
-    def __listextract(self, l1):
-        pt = False
+    def __listextract(self, l1):  # extracts portfolio and stock information
+        pt = False  # necessary initialization
         st = False
         for item in l1:
-            if (pt and st) == True:
+            if (pt and st) == True:  # stops loop once both stocks and portfolio are found
                 break
             if "Portfolio:" in item:
                 pt = True
@@ -196,17 +193,17 @@ class VirtualBroker:  # name change
             if "Stock:" in item:
                 st = True
                 continue
-        if pt == False or st == False:
+        if pt == False or st == False:  # if neither are found, program ends--returns false
             return False, False
-        portfolio = l1.pop(0)
-        stock = list()
-        for item in l1:
+        portfolio = l1.pop(0)  # portfolio is first position in list
+        stock = list()  # creates stock list
+        for item in l1:  # adds stored stocks to list
             if "Stock" not in item:
                 break
             else:
                 stock.append(item)
         stockM = list()
-        for item in stock:
+        for item in stock:  # removes stock identifier
             edit = item[7:]
             stockM.append(edit)
         stocks = "\t".join(stockM)
@@ -214,35 +211,35 @@ class VirtualBroker:  # name change
 
     def __email(self):
         self.__searchfile()
-        logininfo = ['jerryvbroker@gmail.com', 'CS121AFinal']
+        logininfo = ['jerryvbroker@gmail.com', 'CS121AFinal']  # gmail account associated with Jerry
 
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.ehlo()
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)  # creates secure server
+        server.ehlo()  # allows communication with server
         server.login(logininfo[0], logininfo[1])
+        # email message
         server.sendmail(logininfo[0], email, "Here is your financial report!" + '\n\n'
-                                                                                "Suggested Portfolio:" + self.portfolio[
-                                                                                                         11:] + '\n\n'
-                                                                                                                'Archived Stocks:' + self.stocks + '\n\n\n'
-                                                                                                                                                   'Good Luck!\n'
-                                                                                                                                                   'Jerry')
+                                             "Suggested Portfolio:" + self.portfolio[11:] + '\n\n'
+                                             'Archived Stocks:' + self.stocks + '\n\n\n'
+                                             'Good Luck!\n'
+                                              'Jerry')
         server.close()
 
-    def setScene(self):
+    def setScene(self): # abstract method
         raise NotImplementedError("Subclass must implement abstract method")
 
-    def getButton(self):
+    def getButton(self):  # uses loop to determine if button is clicked or not
         while True:
             p = self.win.getMouse()
             for b in self.buttons:
                 if b.clicked(p):
                     return b.getLabel()
 
-    def processButton(self, key):
+    def processButton(self, key):  # processes button if clicked
         if key == 'Stock Picking':
             self.win.close()
             newin = stockpicking()
             while True:
-                newin.run()
+                newin.run()  # necessary to run the next program
         elif key == 'Portfolio Management':
             self.win.close()
             newin = pmgmt()
@@ -258,8 +255,8 @@ class VirtualBroker:  # name change
             newin = retirement()
             while True:
                 newin.run()
-        if key == 'Email and Exit':
-            if self.__searchfile() == False:
+        if key == 'Email and Exit':  # functions like try and except, ensures there is information in the text file.
+            if self.__searchfile() == False:  # if so, it operates __email
                 self.text2.setText("Error. Add stocks/portfolio")
                 self.text2.setSize(9)
             else:
@@ -267,7 +264,7 @@ class VirtualBroker:  # name change
                 self.win.close()
                 sys.exit()
 
-    def run(self):
+    def run(self):  # runs infinite loop to keep process going. Stops all processes if window is closed!
         while True:
             if self.win.isClosed():
                 break
@@ -285,7 +282,7 @@ class stockpicking(VirtualBroker):
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
-        self.prevScene = self.setScene()
+        self.prevScene = self.setScene()  # stores last scene
 
     def __createButtons(self):
         bsort = [(1, 1, "Back"), (4, 2.5, "Grow Market Share"), (4, 5, "Retain Market Share")]
@@ -299,6 +296,7 @@ class stockpicking(VirtualBroker):
             b.activate()
 
     def __createstockDisplay(self):
+        #  Creates heading
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -314,6 +312,7 @@ class stockpicking(VirtualBroker):
         c.draw(self.win)
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Q box
         questionbox = Rectangle(Point(1, 7.5), Point(6.75, 6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -370,6 +369,7 @@ class retain_peGUI(VirtualBroker):
             b.activate()
 
     def __createstockDisplay(self):
+        #  creates heading
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -383,8 +383,10 @@ class retain_peGUI(VirtualBroker):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        #  creates Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        #  creates QBOX
         questionbox = Rectangle(Point(1, 7.5), Point(6.75, 6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -446,6 +448,7 @@ class grow_peGUI(VirtualBroker):
             b.activate()
 
     def __createstockDisplay(self):
+        # Creates Heading
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -459,8 +462,10 @@ class grow_peGUI(VirtualBroker):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Creates Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Creates QBOX
         questionbox = Rectangle(Point(1, 7.5), Point(6.75, 6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -477,14 +482,14 @@ class grow_peGUI(VirtualBroker):
         return stockpicking
 
     def processButton(self, key):
-        if key == 'PE greater than or equal to 18':  #
-            self.win.close()  #
+        if key == 'PE greater than or equal to 18':
+            self.win.close()
             newin = analyst_opinion()
             while True:
                 newin.run()
-        elif key == 'PE less than 18, greater than zero':  #
-            self.win.close()  #
-            newin = dontbuy()  #
+        elif key == 'PE less than 18, greater than zero':
+            self.win.close()
+            newin = dontbuy()
             while True:
                 newin.run()
         elif key == "Negative/Zero PE":
@@ -521,6 +526,7 @@ class analyst_opinion(VirtualBroker):
             b.activate()
 
     def __createstockDisplay(self):
+        # Create Heading
         head = Rectangle(Point(.15, 8), Point(9.85, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -534,8 +540,10 @@ class analyst_opinion(VirtualBroker):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Create Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Create Qbox
         questionbox = Rectangle(Point(.15, 7.85), Point(6.9, 6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -550,14 +558,14 @@ class analyst_opinion(VirtualBroker):
         return stockpicking
 
     def processButton(self, key):
-        if key == 'Generally Positive':  #
-            self.win.close()  #
+        if key == 'Generally Positive':
+            self.win.close()
             newin = buy()
             while True:
                 newin.run()
-        elif key == 'Generally Negative':  #
-            self.win.close()  #
-            newin = dontbuy()  #
+        elif key == 'Generally Negative':
+            self.win.close()
+            newin = dontbuy()
             while True:
                 newin.run()
         elif key == "Back":
@@ -589,6 +597,7 @@ class strongreason(VirtualBroker):
             b.activate()
 
     def __createstockDisplay(self):
+        # Create Heading
         head = Rectangle(Point(.3, 8), Point(9.7, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -602,8 +611,10 @@ class strongreason(VirtualBroker):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Create Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Create QBOX
         questionbox = Rectangle(Point(1, 7.5), Point(6.75, 6.25))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -620,14 +631,14 @@ class strongreason(VirtualBroker):
         return stockpicking
 
     def processButton(self, key):
-        if key == 'Yes':  #
-            self.win.close()  #
+        if key == 'Yes':
+            self.win.close()
             newin = buy()
             while True:
                 newin.run()
-        elif key == 'No':  #
-            self.win.close()  #
-            newin = dontbuy()  #
+        elif key == 'No':
+            self.win.close()
+            newin = dontbuy()
             while True:
                 newin.run()
         elif key == "Back":
@@ -660,6 +671,7 @@ class divyield(VirtualBroker, Welcome):
             b.activate()
 
     def __createstockDisplay(self):
+        # Creates heading
         head = Rectangle(Point(.2, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -673,8 +685,10 @@ class divyield(VirtualBroker, Welcome):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Creates Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Creates qbox
         questionbox = Rectangle(Point(.2, 7.5), Point(6.9, 6))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -714,17 +728,17 @@ class divyield(VirtualBroker, Welcome):
             blink.undraw()
             try:
                 divyield1 = float(information)
-                if divyield1 > 1.5:
+                if divyield1 > 1.5: # Checks for desired ratio
                     self.win.close()
                     newin = buy()
                     while True:
                         newin.run()
-                else:
+                else: # Non-float number
                     self.win.close()
                     newin = dontbuy()
                     while True:
                         newin.run()
-            except:
+            except: # Necessary to get rid of win.closed error
                 try:
                     self.error.draw(self.win)
                 except:
@@ -739,6 +753,7 @@ class dontbuy(VirtualBroker):
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
+        self.prevScene = self.setScene()
 
     def __createButtons(self):
         bsort = [(2, 1, "Return to home page")]
@@ -749,6 +764,7 @@ class dontbuy(VirtualBroker):
             b.activate()
 
     def __createstockDisplay(self):
+        # Create Heading
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -762,8 +778,10 @@ class dontbuy(VirtualBroker):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Create Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Create Qbox
         questionbox = Rectangle(Point(1, 7.5), Point(6.75, 6.2))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -775,27 +793,34 @@ class dontbuy(VirtualBroker):
         question1.draw(self.win)
         question1.setSize(15)
         question1.setFace('courier')
+        # Reason1
         reason1 = Text(Point(3.8, 5.8), "-The stock is most likely overpriced")
         reason1.draw(self.win)
         reason1.setSize(13)
         reason1.setFace('courier')
+        # Reason 2
         reason2 = Text(Point(3.5, 5), "-Dividend income is insufficient")
         reason2.draw(self.win)
         reason2.setSize(13)
         reason2.setFace('courier')
+        # Reason 3
         reason3 = Text(Point(3.5, 4.25), "-The stock is not likely to grow")
         reason3.draw(self.win)
         reason3.setSize(13)
         reason3.setFace('courier')
+        # Reason 4
         reason4 = Text(Point(3.6, 3.3), "-This company is incurring a loss\nand is not expected to grow")
         reason4.draw(self.win)
         reason4.setSize(13)
         reason4.setFace('courier')
 
+    def setScene(self):
+        return VirtualBroker # No need to go back to previous scene
+
     def processButton(self, key):
-        if key == 'Return to home page':  #
-            self.win.close()  #
-            newin = VirtualBroker()
+        if key == 'Return to home page':
+            self.win.close()
+            newin = self.prevScene()
             while True:
                 newin.run()
 
@@ -808,6 +833,7 @@ class buy(VirtualBroker):
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
+        self.prevScene = self.setScene()
 
     def __createButtons(self):
         bsort = [(2, 1, "Return to home page"), (3.8, 4.5, "Projected Earnings"), (3.8, 3, "Archive This Stockpick")]
@@ -818,6 +844,7 @@ class buy(VirtualBroker):
             b.activate()
 
     def __createstockDisplay(self):
+        # Heading
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -831,8 +858,10 @@ class buy(VirtualBroker):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # QBox
         questionbox = Rectangle(Point(1, 7.5), Point(6.75, 6.75))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -840,10 +869,14 @@ class buy(VirtualBroker):
         question.draw(self.win)
         question.setSize(15)
         question.setFace('courier')
+        # Reason
         reason1 = Text(Point(3.8, 5.8), "Although we advise you to buy,\nearnings are never guaranteed")
         reason1.draw(self.win)
         reason1.setSize(13)
         reason1.setFace('courier')
+
+    def setScene(self):
+        return VirtualBroker
 
     def processButton(self, key):
         if key == 'Projected Earnings':
@@ -856,9 +889,9 @@ class buy(VirtualBroker):
             newin = filecreator()
             while True:
                 newin.run()
-        elif key == 'Return to home page':  #
-            self.win.close()  #
-            newin = VirtualBroker()
+        elif key == 'Return to home page':
+            self.win.close()
+            newin = self.prevScene()
             while True:
                 newin.run()
 
@@ -886,6 +919,7 @@ class projearn(VirtualBroker, Welcome):
             b.activate()
 
     def __createstockDisplay(self):
+        # Create Heading
         head = Rectangle(Point(1, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -899,8 +933,10 @@ class projearn(VirtualBroker, Welcome):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Create Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Qbox
         questionbox = Rectangle(Point(.2, 7), Point(6.9, 6))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -910,6 +946,7 @@ class projearn(VirtualBroker, Welcome):
         question.setFace('courier')
 
     def __createinputDisplay(self):
+        # inputBar Box
         box1 = Rectangle(Point(4.7, 4.8), Point(6.7, 5.8))  # textbox
         box1.setFill("white")
         box1.draw(self.win)
@@ -919,7 +956,7 @@ class projearn(VirtualBroker, Welcome):
         textbox = Text(Point(5.7, 5.3), "")  # Creates a blank textbox
         textbox.draw(self.win)
         self.textB = textbox  # creates a textbox variable
-        self.error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value")
+        self.error = Text(Point(4.5, 2.5), "ERROR. Please enter a numeric value") # For try/except
 
     def setScene(self):
         return buy
@@ -937,7 +974,7 @@ class projearn(VirtualBroker, Welcome):
             blink.draw(self.win)
             information = self.inputBar()
             blink.undraw()
-            try:
+            try:  # Calculations. Ensures value is a float
                 price = float(information)
                 fiveper = price * 1.05 - price
                 nfiveper = "%.2f" % fiveper
@@ -962,12 +999,12 @@ class projearn(VirtualBroker, Welcome):
                     sys.exit()
 
 
-class filecreator(VirtualBroker, Welcome):
+class filecreator(VirtualBroker, Welcome):  # appends to file
     def __init__(self):
         win = GraphWin("Stock Picking(11)", 700, 500)
         win.setCoords(0, 0, 10, 10)
         win.setBackground("slategray")
-        self.storedinfo = 0
+        self.storedinfo = 0  # initializes value for archive button
         self.win = win
         self.__createstockDisplay()
         self.__createButtons()
@@ -987,6 +1024,7 @@ class filecreator(VirtualBroker, Welcome):
             b.activate()
 
     def __createstockDisplay(self):
+        # Creates Heading
         head = Rectangle(Point(.2, 8), Point(9, 9))
         head.setFill('white')
         head.draw(self.win)
@@ -1000,8 +1038,10 @@ class filecreator(VirtualBroker, Welcome):
         c.setOutline('gold')
         c.setWidth(4)
         c.draw(self.win)
+        # Creates Jerry
         image = Image(Point(8, 5), "myrodin.gif")
         image.draw(self.win)
+        # Creates QBOX
         questionbox = Rectangle(Point(.2, 7.5), Point(6.9, 6))
         questionbox.setFill('white')
         questionbox.draw(self.win)
@@ -1031,26 +1071,26 @@ class filecreator(VirtualBroker, Welcome):
         textbox.draw(self.win)
         self.textA = textbox  # creates a textbox variable
 
-        self.error = Text(Point(4.5, 2.5), "ERROR")
+        self.error = Text(Point(4.5, 2.5), "ERROR") # Error for Try/except
 
-    def __storeName(self, name):
+    def __storeName(self, name): # Method necessary to avoid global variable
         self.Name = name
 
-    def __storeTicker(self, ticker):
+    def __storeTicker(self, ticker):  # method necessary to avoid global variable
         self.Ticker = ticker
 
-    def inputBar1(self):
+    def inputBar1(self):  # See previous inputBar documentation. Necessary for second textbox
         self.textA.setText("")
         index = ""  # Blank Message
         while True:
-            p = self.win.getKey()  # Gets key pressed
+            p = self.win.getKey()
             if p == "Return":
                 return index
             if p == "BackSpace":
-                index = index[0:len(index) - 1]  # Removes last item
+                index = index[0:len(index) - 1]
                 self.textA.setText(" " + index)
                 continue
-            if p == "space":  # adds a space when the space bar is hit!
+            if p == "space":
                 index += " "
                 continue
             if p == "period":
@@ -1060,7 +1100,7 @@ class filecreator(VirtualBroker, Welcome):
             if p == "Shift_L" or p == "Shift_R":
                 self.textA.setText(" " + index)
                 continue
-            index += str(p)  # Adds String
+            index += str(p)
             self.textA.setText(" " + index)
 
     def setScene(self):
@@ -1068,17 +1108,17 @@ class filecreator(VirtualBroker, Welcome):
 
     def processButton(self, key):
         #  checks for info stored. No repeat Archive Button.
-        if key == "Back" and self.storedinfo == 0:
+        if key == "Back" and self.storedinfo == 0:  # Archive not pressed
             self.win.close()
             newin = self.prevScene()
             while True:
                 newin.run()
-        elif key == "Back" and self.storedinfo == 1:
+        elif key == "Back" and self.storedinfo == 1:  # Archive pressed
             self.win.close()
             newin = VirtualBroker()
             while True:
                 newin.run()
-        elif key == "Click to Enter 'ticker'":
+        elif key == "Click to Enter 'ticker'":  # Calls ticker name
             self.error.undraw()
             blink = Rectangle(Point(5.8, 3.8), Point(5.9, 3.9))  # notifies the user to type
             blink.setFill('red')
@@ -1097,7 +1137,7 @@ class filecreator(VirtualBroker, Welcome):
         elif key == "Archive" and self.storedinfo == 0:
             self.error.undraw()
             try:
-                self.fileadd(self.Name, self.Ticker)
+                self.fileadd(self.Name, self.Ticker)  # Ensures values are in textbox
                 self.storedinfo = +1
             except:
                 try:
@@ -1105,8 +1145,8 @@ class filecreator(VirtualBroker, Welcome):
                 except:
                     sys.exit()
 
-    def fileadd(self, name, ticker):
-        fileappend = open(FileName, 'a')
+    def fileadd(self, name, ticker): # appends to file
+        fileappend = open(FileName, 'a')  # calls global variable FileName
         fileappend.write("Stock: " + str(name) + " " + str(ticker) + '\t')
         fileappend.close()
         stored = Text(Point(5, 2), "Your file has been stored. \n Please click 'Back' to return to the main menu")
